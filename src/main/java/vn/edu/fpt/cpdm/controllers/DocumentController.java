@@ -1,6 +1,9 @@
 package vn.edu.fpt.cpdm.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +36,14 @@ public class DocumentController {
         return ResponseEntity.ok(documentSummaries);
     }
 
+    @GetMapping("/creates")
+    public ResponseEntity<Page<DocumentSummary>> findAllCreatedDocuments(@PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(documentService.findAllSummary(pageable));
+    }
+
     @PostMapping
     public ResponseEntity createDocument(@Valid @RequestBody DocumentCreateForm documentCreateForm,
-                                            BindingResult result) {
+                                         BindingResult result) {
         if (result.hasErrors()) {
             String message = ModelErrorMessage.build(result);
             throw new ModelNotValidException(message);
@@ -52,9 +60,9 @@ public class DocumentController {
 
     @PatchMapping("/{id}/forward_process")
     public ResponseEntity forwardProcessDocument(@PathVariable("id") Integer documentId,
-                                                    @RequestParam("outcomeId") Integer outcomeId,
-                                                    @Valid @RequestBody FeedbackCreateForm feedbackCreateForm,
-                                                    BindingResult result) {
+                                                 @RequestParam("outcomeId") Integer outcomeId,
+                                                 @Valid @RequestBody FeedbackCreateForm feedbackCreateForm,
+                                                 BindingResult result) {
         if (result.hasErrors()) {
             String message = ModelErrorMessage.build(result);
             throw new ModelNotValidException(message);

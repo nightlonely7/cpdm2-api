@@ -20,6 +20,10 @@ public class DocumentEntity {
     private String title;
 
     @Basic
+    @Column(name = "summary")
+    private String summary;
+
+    @Basic
     @Lob
     @Column(name = "detail")
     private String detail;

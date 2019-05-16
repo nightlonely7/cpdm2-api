@@ -2,6 +2,8 @@ package vn.edu.fpt.cpdm.services.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.cpdm.entities.*;
 import vn.edu.fpt.cpdm.exceptions.BadRequestException;
@@ -40,6 +42,11 @@ public class DocumentServiceImpl implements DocumentService {
         this.authenticationService = authenticationService;
         this.stepOutcomeRepository = stepOutcomeRepository;
         this.stepFeedbackRepository = stepFeedbackRepository;
+    }
+
+    @Override
+    public Page<DocumentSummary> findAllSummary(Pageable pageable) {
+        return documentRepository.findAllSummaryBy(pageable);
     }
 
     @Override

@@ -7,12 +7,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import vn.edu.fpt.cpdm.forms.users.UserLoginForm;
 import vn.edu.fpt.cpdm.models.UserToken;
+import vn.edu.fpt.cpdm.models.users.UserBasic;
 import vn.edu.fpt.cpdm.services.TokenAuthenticationService;
 import vn.edu.fpt.cpdm.services.UserService;
+
+import java.security.Principal;
 
 @Controller
 public class MainController {
@@ -41,12 +45,12 @@ public class MainController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-//    @GetMapping("/self")
-//    public ResponseEntity<UserBasic> self(Principal principal) {
-//
-//        UserBasic userBasic = userService.findBasicByEmail(principal.getName());
-//
-//        return ResponseEntity.ok(userBasic);
-//    }
+    @GetMapping("/self")
+    public ResponseEntity<UserBasic> self(Principal principal) {
+
+        UserBasic userBasic = userService.findBasicByUsername(principal.getName());
+
+        return ResponseEntity.ok(userBasic);
+    }
 
 }
