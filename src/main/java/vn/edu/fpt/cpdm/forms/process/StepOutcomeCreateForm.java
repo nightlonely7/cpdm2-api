@@ -12,7 +12,7 @@ public class StepOutcomeCreateForm {
     @NotNull
     private String action;
 
-    private Integer nextStepId;
+    private Integer nextStepTemporaryId;
 
     @NotNull
     private Boolean lastStep;
