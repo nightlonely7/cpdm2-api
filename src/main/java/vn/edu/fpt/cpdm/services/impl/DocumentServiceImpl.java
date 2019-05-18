@@ -12,10 +12,7 @@ import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
 import vn.edu.fpt.cpdm.models.documents.DocumentSummary;
-import vn.edu.fpt.cpdm.repositories.DocumentProcessRepository;
-import vn.edu.fpt.cpdm.repositories.DocumentRepository;
-import vn.edu.fpt.cpdm.repositories.StepFeedbackRepository;
-import vn.edu.fpt.cpdm.repositories.StepOutcomeRepository;
+import vn.edu.fpt.cpdm.repositories.*;
 import vn.edu.fpt.cpdm.services.AuthenticationService;
 import vn.edu.fpt.cpdm.services.DocumentService;
 
@@ -30,18 +27,21 @@ public class DocumentServiceImpl implements DocumentService {
     private final AuthenticationService authenticationService;
     private final StepOutcomeRepository stepOutcomeRepository;
     private final StepFeedbackRepository stepFeedbackRepository;
+    private final OutsiderRepository outsiderRepository;
 
     @Autowired
     public DocumentServiceImpl(DocumentRepository documentRepository,
                                DocumentProcessRepository documentProcessRepository,
                                AuthenticationService authenticationService,
                                StepOutcomeRepository stepOutcomeRepository,
-                               StepFeedbackRepository stepFeedbackRepository) {
+                               StepFeedbackRepository stepFeedbackRepository,
+                               OutsiderRepository outsiderRepository) {
         this.documentRepository = documentRepository;
         this.documentProcessRepository = documentProcessRepository;
         this.authenticationService = authenticationService;
         this.stepOutcomeRepository = stepOutcomeRepository;
         this.stepFeedbackRepository = stepFeedbackRepository;
+        this.outsiderRepository = outsiderRepository;
     }
 
     @Override
@@ -51,14 +51,24 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void create(DocumentCreateForm documentCreateForm) {
+
+        if (documentRepository.existsByCode(documentCreateForm.getCode())) {
+            throw new ConflictException("This document code '" + documentCreateForm.getCode()+ "' " +
+                    "is already existed!");
+        }
+
         DocumentEntity documentEntity = new DocumentEntity();
+        documentEntity.setCode(documentCreateForm.getCode());
         documentEntity.setTitle(documentCreateForm.getTitle());
+        documentEntity.setSummary(documentCreateForm.getSummary());
+        documentEntity.setDecree(documentCreateForm.getDecree());
         documentEntity.setDetail(documentCreateForm.getDetail());
-        DocumentProcessEntity documentProcessEntity = documentProcessRepository
-                .findById(documentCreateForm.getProcessId()).orElseThrow(
-                        () -> new EntityNotFoundException(documentCreateForm.getProcessId(), "DocumentProcess")
-                );
-        documentEntity.setProcess(documentProcessEntity);
+        documentEntity.setArrivalDate(documentCreateForm.getArrivalDate());
+        documentEntity.setEffectiveDate(documentCreateForm.getEffectiveDate());
+        documentEntity.setEffectiveEndDate(documentCreateForm.getEffectiveEndDate());
+        documentEntity.setOutsider(outsiderRepository.findById(documentCreateForm.getOutsiderId()).orElseThrow(
+                () -> new EntityNotFoundException(documentCreateForm.getOutsiderId(), "Outsider")
+        ));
         documentRepository.save(documentEntity);
     }
 

@@ -3,6 +3,10 @@ INSERT INTO user (username, password, role, available) VALUES
 ('khanh', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 'ROLE_ADMIN', true),
 ('nhan', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 'ROLE_ADMIN', true);
 
-INSERT INTO document (title, summary, detail, created_time, last_modified_time) VALUES
-('title1', 'summary1', 'detail1', '2017-09-20 07:22:11', '2017-09-20 07:22:11'),
-('title2', 'summary2', 'detail2', '2017-09-20 07:22:12', '2017-09-20 07:22:12');
+INSERT INTO outsider(code, name, contact_data) VALUES
+('code1', 'name1', 'contact_data1'),
+('code2', 'name2', 'contact_data2');
+
+INSERT INTO document (code, outsider_id, title, summary, detail, arrival_date, created_time, last_modified_time, started_processing, processed) VALUES
+('code1', 1, 'title1', 'summary1', 'detail1', '2017-09-20', '2017-09-20 07:22:11', '2017-09-20 07:22:11', false, false),
+('code2', 1, 'title2', 'summary2', 'detail2', '2017-09-20', '2017-09-20 07:22:12', '2017-09-20 07:22:12', false, false);
