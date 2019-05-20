@@ -15,7 +15,7 @@ public interface DocumentRepository extends JpaRepository<DocumentEntity, Intege
 
     Page<DocumentSummary> findAllSummaryBy(Pageable pageable);
 
-    Page<DocumentSummary> findAllSummaryByStartedProcessingFalse();
+    Page<DocumentSummary> findAllSummaryByStartedProcessingFalse(Pageable pageable);
 
     boolean existsByCode(String code);
 }
