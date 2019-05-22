@@ -11,6 +11,7 @@ import vn.edu.fpt.cpdm.exceptions.ConflictException;
 import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
+import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
 import vn.edu.fpt.cpdm.models.documents.DocumentSummary;
 import vn.edu.fpt.cpdm.repositories.*;
 import vn.edu.fpt.cpdm.services.AuthenticationService;
@@ -50,11 +51,23 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public void create(DocumentCreateForm documentCreateForm) {
+    public DocumentDetail findDetailById(Integer id) {
+        return documentRepository.findDetailById(id).orElseThrow(
+                () -> new EntityNotFoundException(id, "Document")
+        );
+    }
+
+    @Override
+    public DocumentDetail create(DocumentCreateForm documentCreateForm) {
 
         if (documentRepository.existsByCode(documentCreateForm.getCode())) {
-            throw new ConflictException("This document code '" + documentCreateForm.getCode()+ "' " +
+            throw new ConflictException("This document code '" + documentCreateForm.getCode() + "' " +
                     "is already existed!");
+        }
+
+        if (documentCreateForm.getEffectiveDate().isAfter(documentCreateForm.getEffectiveEndDate())) {
+            throw new BadRequestException("EffectiveDate as '" + documentCreateForm.getEffectiveDate().toString() + "' " +
+                    "can not after effectiveEndDate as '" + documentCreateForm.getEffectiveEndDate() + "'");
         }
 
         DocumentEntity documentEntity = new DocumentEntity();
@@ -69,18 +82,32 @@ public class DocumentServiceImpl implements DocumentService {
         documentEntity.setOutsider(outsiderRepository.findById(documentCreateForm.getOutsiderId()).orElseThrow(
                 () -> new EntityNotFoundException(documentCreateForm.getOutsiderId(), "Outsider")
         ));
-        documentRepository.save(documentEntity);
+        DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
+        DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
+                () -> new EntityNotFoundException(savedDocumentEntity.getId(), "Document")
+        );
+
+        return savedDocumentDetail;
     }
 
     @Override
-    public void putIntoProcess(Integer documentId) {
+    public DocumentDetail putIntoProcess(Integer documentId, Integer processId) {
         DocumentEntity documentEntity = documentRepository.findById(documentId).orElseThrow(
                 () -> new EntityNotFoundException(documentId, "Document")
         );
-        documentEntity.setCurrentStep(documentEntity.getProcess().getFirstStep());
+        DocumentProcessEntity documentProcessEntity = documentProcessRepository.findById(processId).orElseThrow(
+                () -> new EntityNotFoundException(processId, "DocumentProcess")
+        );
+        documentEntity.setProcess(documentProcessEntity);
+        documentEntity.setCurrentStep(documentProcessEntity.getFirstStep());
         documentEntity.setStartedProcessingTime(LocalDateTime.now());
         documentEntity.setStartedProcessing(Boolean.TRUE);
-        documentRepository.save(documentEntity);
+        documentEntity.setProcessed(Boolean.FALSE);
+        DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
+        DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
+                () -> new EntityNotFoundException(savedDocumentEntity.getId(), "Document")
+        );
+        return savedDocumentDetail;
     }
 
     @Override
@@ -126,15 +153,16 @@ public class DocumentServiceImpl implements DocumentService {
         documentEntity.setLastProcessedTime(savedStepFeedbackEntity.getCompletedTime());
         if (stepOutcomeEntity.getLastStep()) {
             documentEntity.setProcessed(Boolean.TRUE);
+            documentEntity.setStartedProcessing(Boolean.FALSE);
         }
         documentRepository.save(documentEntity);
     }
 
     @Override
-    public List<DocumentSummary> findAllExecutingDocuments() {
+    public Page<DocumentSummary> findAllExecutingDocuments(Pageable pageable) {
 
         UserEntity executor = authenticationService.getCurrentLoggedUser();
-        List<DocumentSummary> documentSummaries = documentRepository.findAllByCurrentStep_Executor(executor);
+        Page<DocumentSummary> documentSummaries = documentRepository.findAllByCurrentStep_Executor(executor, pageable);
 
         return documentSummaries;
     }

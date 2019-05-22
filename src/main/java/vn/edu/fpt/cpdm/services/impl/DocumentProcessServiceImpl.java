@@ -10,6 +10,7 @@ import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
 import vn.edu.fpt.cpdm.forms.process.DocumentProcessCreateForm;
 import vn.edu.fpt.cpdm.forms.process.ProcessStepCreateForm;
 import vn.edu.fpt.cpdm.forms.process.StepOutcomeCreateForm;
+import vn.edu.fpt.cpdm.models.processes.DocumentProcessSummary;
 import vn.edu.fpt.cpdm.repositories.DocumentProcessRepository;
 import vn.edu.fpt.cpdm.repositories.ProcessStepRepository;
 import vn.edu.fpt.cpdm.repositories.StepOutcomeRepository;
@@ -17,6 +18,7 @@ import vn.edu.fpt.cpdm.repositories.UserRepository;
 import vn.edu.fpt.cpdm.services.DocumentProcessService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -68,7 +70,7 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
             for (StepOutcomeCreateForm stepOutcomeCreateForm : processStepCreateForm.getOutcomes()) {
                 StepOutcomeEntity stepOutcomeEntity = new StepOutcomeEntity();
                 stepOutcomeEntity.setStep(map.get(processStepCreateForm.getTemporaryId()));
-                stepOutcomeEntity.setSummary(stepOutcomeCreateForm.getSummary());
+                stepOutcomeEntity.setDescription(stepOutcomeCreateForm.getDescription());
                 stepOutcomeEntity.setAction(stepOutcomeCreateForm.getAction());
                 stepOutcomeEntity.setLastStep(stepOutcomeCreateForm.getLastStep());
                 if (stepOutcomeEntity.getLastStep() == false) {
@@ -77,5 +79,10 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
                 stepOutcomeRepository.save(stepOutcomeEntity);
             }
         }
+    }
+
+    @Override
+    public List<DocumentProcessSummary> findAllSummary() {
+        return documentProcessRepository.findAllSummaryBy();
     }
 }

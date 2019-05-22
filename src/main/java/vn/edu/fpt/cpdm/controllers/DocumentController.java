@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.cpdm.exceptions.ModelNotValidException;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
+import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
 import vn.edu.fpt.cpdm.models.documents.DocumentSummary;
 import vn.edu.fpt.cpdm.services.DocumentService;
 import vn.edu.fpt.cpdm.utils.ModelErrorMessage;
@@ -29,11 +30,16 @@ public class DocumentController {
     }
 
     @GetMapping("/executing")
-    public ResponseEntity<List<DocumentSummary>> findAllExecutingDocuments() {
+    public ResponseEntity<Page<DocumentSummary>> findAllExecutingDocuments(@PageableDefault Pageable pageable) {
 
-        List<DocumentSummary> documentSummaries = documentService.findAllExecutingDocuments();
+        Page<DocumentSummary> documentSummaries = documentService.findAllExecutingDocuments(pageable);
 
         return ResponseEntity.ok(documentSummaries);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DocumentDetail> findDetailById(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(documentService.findDetailById(id));
     }
 
     @GetMapping("/creates")
@@ -42,20 +48,21 @@ public class DocumentController {
     }
 
     @PostMapping
-    public ResponseEntity createDocument(@Valid @RequestBody DocumentCreateForm documentCreateForm,
-                                         BindingResult result) {
+    public ResponseEntity<DocumentDetail> createDocument(@Valid @RequestBody DocumentCreateForm documentCreateForm,
+                                                         BindingResult result) {
         if (result.hasErrors()) {
             String message = ModelErrorMessage.build(result);
             throw new ModelNotValidException(message);
         }
-        documentService.create(documentCreateForm);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(documentService.create(documentCreateForm));
     }
 
     @PatchMapping("/{id}/put_into_process")
-    public ResponseEntity putDocumentIntoProcess(@PathVariable("id") Integer documentId) {
-        documentService.putIntoProcess(documentId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<DocumentDetail> putDocumentIntoProcess(@PathVariable("id") Integer documentId,
+                                                                 @RequestParam("processId") Integer processId) {
+
+        return ResponseEntity.ok(documentService.putIntoProcess(documentId, processId));
     }
 
     @PatchMapping("/{id}/forward_process")
