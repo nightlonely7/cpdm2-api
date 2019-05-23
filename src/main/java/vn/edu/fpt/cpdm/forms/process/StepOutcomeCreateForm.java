@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class StepOutcomeCreateForm {
 
-    private String summary;
+    private String description;
 
     @NotNull
     private String action;

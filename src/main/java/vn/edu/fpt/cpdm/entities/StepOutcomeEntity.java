@@ -19,8 +19,8 @@ public class StepOutcomeEntity {
     private ProcessStepEntity step;
 
     @Basic
-    @Column(name = "summary")
-    private String summary;
+    @Column(name = "description")
+    private String description;
 
     @Basic
     @Column(name = "action")
