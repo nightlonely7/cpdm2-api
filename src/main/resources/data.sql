@@ -10,3 +10,7 @@ INSERT INTO outsider(code, name, contact_data) VALUES
 INSERT INTO document (code, outsider_id, title, summary, detail, arrival_date, created_time, last_modified_time, started_processing, processed) VALUES
 ('code1', 1, 'title1', 'summary1', 'detail1', '2017-09-20', '2017-09-20 07:22:11', '2017-09-20 07:22:11', false, false),
 ('code2', 1, 'title2', 'summary2', 'detail2', '2017-09-20', '2017-09-20 07:22:12', '2017-09-20 07:22:12', false, false);
+
+INSERT INTO document_process(name,description,created_time,active) VALUES
+('name 1','des 1', '2018-05-08 00:00:00',true),
+('name 2','des 2', '2018-05-08 01:00:00',true);

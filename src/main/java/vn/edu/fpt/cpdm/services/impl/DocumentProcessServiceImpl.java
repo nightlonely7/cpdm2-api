@@ -1,6 +1,8 @@
 package vn.edu.fpt.cpdm.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.cpdm.entities.DocumentProcessEntity;
 import vn.edu.fpt.cpdm.entities.ProcessStepEntity;
@@ -10,6 +12,7 @@ import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
 import vn.edu.fpt.cpdm.forms.process.DocumentProcessCreateForm;
 import vn.edu.fpt.cpdm.forms.process.ProcessStepCreateForm;
 import vn.edu.fpt.cpdm.forms.process.StepOutcomeCreateForm;
+import vn.edu.fpt.cpdm.models.processes.DocumentProcessSummary;
 import vn.edu.fpt.cpdm.repositories.DocumentProcessRepository;
 import vn.edu.fpt.cpdm.repositories.ProcessStepRepository;
 import vn.edu.fpt.cpdm.repositories.StepOutcomeRepository;
@@ -77,5 +80,10 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
                 stepOutcomeRepository.save(stepOutcomeEntity);
             }
         }
+    }
+
+    @Override
+    public Page<DocumentProcessSummary> findAllSummary(Pageable pageable) {
+        return documentProcessRepository.findAllByActiveTrueOrderByCreatedTimeDesc(pageable);
     }
 }

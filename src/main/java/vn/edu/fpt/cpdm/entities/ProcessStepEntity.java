@@ -18,6 +18,14 @@ public class ProcessStepEntity {
     @Column(name = "description")
     private String description;
 
+    @Basic
+    @Column(name = "position")
+    private Integer position;
+
+    @ManyToOne
+    @JoinColumn(name = "next_step_id", referencedColumnName = "id")
+    private ProcessStepEntity nextStep;
+
     @ManyToOne
     @JoinColumn(name = "executor_id", referencedColumnName = "id")
     private UserEntity executor;

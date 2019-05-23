@@ -3,6 +3,7 @@ package vn.edu.fpt.cpdm.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity(name = "DocumentProcess")
 @Table(name = "document_process")
@@ -22,7 +23,21 @@ public class DocumentProcessEntity {
     @Column(name = "description")
     private String description;
 
+    @Basic
+    @Column(name = "active")
+    private boolean active;
+
+    @Basic
+    @Column(name = "created_time", nullable = false)
+    private LocalDateTime createdTime;
+
     @OneToOne
     @JoinColumn(name = "first_step_id", referencedColumnName = "id")
     private ProcessStepEntity firstStep;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdTime = LocalDateTime.now();
+        this.active = true;
+    }
 }
