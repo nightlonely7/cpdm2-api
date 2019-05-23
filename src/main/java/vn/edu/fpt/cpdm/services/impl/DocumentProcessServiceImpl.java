@@ -53,18 +53,18 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
         for (ProcessStepCreateForm processStepCreateForm : documentProcessCreateForm.getSteps()) {
             ProcessStepEntity processStepEntity = new ProcessStepEntity();
             processStepEntity.setProcess(savedDocumentProcessEntity);
+            processStepEntity.setName(processStepCreateForm.getName());
             processStepEntity.setDescription(processStepCreateForm.getDescription());
             UserEntity executor = userRepository.findById(processStepCreateForm.getExecutorId()).orElseThrow(
                     () -> new EntityNotFoundException(processStepCreateForm.getExecutorId(), "User")
             );
             processStepEntity.setExecutor(executor);
             ProcessStepEntity savedProcessStepEntity = processStepRepository.saveAndFlush(processStepEntity);
-            if (processStepCreateForm.getFirst()) {
-                savedDocumentProcessEntity.setFirstStep(savedProcessStepEntity);
-                documentProcessRepository.save(savedDocumentProcessEntity);
-            }
             map.put(processStepCreateForm.getTemporaryId(), savedProcessStepEntity);
         }
+
+        savedDocumentProcessEntity.setFirstStep(map.get(documentProcessCreateForm.getFirstStepTemporaryId()));
+        documentProcessRepository.save(savedDocumentProcessEntity);
 
         // Outcome
         for (ProcessStepCreateForm processStepCreateForm : documentProcessCreateForm.getSteps()) {
@@ -72,8 +72,9 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
                 StepOutcomeEntity stepOutcomeEntity = new StepOutcomeEntity();
                 stepOutcomeEntity.setStep(map.get(processStepCreateForm.getTemporaryId()));
                 stepOutcomeEntity.setDescription(stepOutcomeCreateForm.getDescription());
-                stepOutcomeEntity.setAction(stepOutcomeCreateForm.getAction());
+                stepOutcomeEntity.setName(stepOutcomeCreateForm.getName());
                 stepOutcomeEntity.setLastStep(stepOutcomeCreateForm.getLastStep());
+                stepOutcomeEntity.setMain(stepOutcomeCreateForm.getMain());
                 if (stepOutcomeEntity.getLastStep() == false) {
                     stepOutcomeEntity.setNextStep(map.get(stepOutcomeCreateForm.getNextStepTemporaryId()));
                 }

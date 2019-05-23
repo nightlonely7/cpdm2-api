@@ -10,11 +10,14 @@ public class StepOutcomeCreateForm {
     private String description;
 
     @NotNull
-    private String action;
+    private String name;
 
     private Integer nextStepTemporaryId;
 
     @NotNull
     private Boolean lastStep;
+
+    @NotNull
+    private Boolean main;
 
 }

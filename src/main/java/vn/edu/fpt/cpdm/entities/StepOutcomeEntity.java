@@ -19,12 +19,12 @@ public class StepOutcomeEntity {
     private ProcessStepEntity step;
 
     @Basic
-    @Column(name = "description")
-    private String description;
+    @Column(name = "name")
+    private String name;
 
     @Basic
-    @Column(name = "action")
-    private String action;
+    @Column(name = "description")
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "next_step_id", referencedColumnName = "id")
@@ -33,4 +33,8 @@ public class StepOutcomeEntity {
     @Basic
     @Column(name = "last_step")
     private Boolean lastStep;
+
+    @Basic
+    @Column(name = "main")
+    private Boolean main;
 }

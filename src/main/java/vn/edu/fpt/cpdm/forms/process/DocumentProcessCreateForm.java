@@ -15,4 +15,7 @@ public class DocumentProcessCreateForm {
 
     @NotNull
     private List<ProcessStepCreateForm> steps;
+
+    @NotNull
+    private Integer firstStepTemporaryId;
 }

@@ -15,16 +15,12 @@ public class ProcessStepEntity {
     private Integer id;
 
     @Basic
-    @Column(name = "description")
-    private String description;
+    @Column(name = "name")
+    private String name;
 
     @Basic
-    @Column(name = "position")
-    private Integer position;
-
-    @ManyToOne
-    @JoinColumn(name = "next_step_id", referencedColumnName = "id")
-    private ProcessStepEntity nextStep;
+    @Column(name = "description")
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "executor_id", referencedColumnName = "id")
