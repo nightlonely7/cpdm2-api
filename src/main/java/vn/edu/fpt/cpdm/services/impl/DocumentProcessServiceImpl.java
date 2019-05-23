@@ -71,7 +71,7 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
             for (StepOutcomeCreateForm stepOutcomeCreateForm : processStepCreateForm.getOutcomes()) {
                 StepOutcomeEntity stepOutcomeEntity = new StepOutcomeEntity();
                 stepOutcomeEntity.setStep(map.get(processStepCreateForm.getTemporaryId()));
-                stepOutcomeEntity.setSummary(stepOutcomeCreateForm.getSummary());
+                stepOutcomeEntity.setDescription(stepOutcomeCreateForm.getDescription());
                 stepOutcomeEntity.setAction(stepOutcomeCreateForm.getAction());
                 stepOutcomeEntity.setLastStep(stepOutcomeCreateForm.getLastStep());
                 if (stepOutcomeEntity.getLastStep() == false) {
