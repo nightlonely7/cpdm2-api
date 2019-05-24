@@ -9,6 +9,8 @@ import vn.edu.fpt.cpdm.repositories.UserRepository;
 import vn.edu.fpt.cpdm.services.AuthenticationService;
 import vn.edu.fpt.cpdm.services.UserService;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -35,5 +37,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findBasicByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("Username '" + username + "' is not found!")
         );
+    }
+
+    @Override
+    public List<UserBasic> findAllExecutor(){
+        return userRepository.findAllBy();
     }
 }
