@@ -20,7 +20,16 @@ public class TemplateEntity {
     private String name;
 
     @Basic
+    @Lob
     @Column(name = "template")
     private String template;
 
+    @Basic
+    @Column(name = "available")
+    private Boolean available;
+
+    @PrePersist
+    void prePersist() {
+        this.available = Boolean.TRUE;
+    }
 }
