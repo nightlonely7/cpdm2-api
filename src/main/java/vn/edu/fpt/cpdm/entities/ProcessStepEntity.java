@@ -3,6 +3,7 @@ package vn.edu.fpt.cpdm.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "ProcessStep")
 @Table(name = "process_step")
@@ -29,5 +30,8 @@ public class ProcessStepEntity {
     @ManyToOne
     @JoinColumn(name = "process_id", referencedColumnName = "id")
     private DocumentProcessEntity process;
+
+    @OneToMany(mappedBy = "step")
+    private List<StepOutcomeEntity> outcomes;
 
 }

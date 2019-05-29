@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "DocumentProcess")
 @Table(name = "document_process")
@@ -34,6 +35,9 @@ public class DocumentProcessEntity {
     @OneToOne
     @JoinColumn(name = "first_step_id", referencedColumnName = "id")
     private ProcessStepEntity firstStep;
+
+    @OneToMany(mappedBy = "process", cascade = CascadeType.ALL)
+    private List<ProcessStepEntity> steps;
 
     @PrePersist
     public void prePersist() {

@@ -12,6 +12,7 @@ import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
 import vn.edu.fpt.cpdm.forms.process.DocumentProcessCreateForm;
 import vn.edu.fpt.cpdm.forms.process.ProcessStepCreateForm;
 import vn.edu.fpt.cpdm.forms.process.StepOutcomeCreateForm;
+import vn.edu.fpt.cpdm.models.processes.DocumentProcessDetail;
 import vn.edu.fpt.cpdm.models.processes.DocumentProcessSummary;
 import vn.edu.fpt.cpdm.repositories.DocumentProcessRepository;
 import vn.edu.fpt.cpdm.repositories.ProcessStepRepository;
@@ -39,13 +40,20 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
     }
 
     @Override
-    public void create(DocumentProcessCreateForm documentProcessCreateForm) {
+    public DocumentProcessDetail findDetailById(Integer id) {
+        return documentProcessRepository.findDetailById(id).orElseThrow(
+                () -> new EntityNotFoundException(id, "DocumentProcess")
+        );
+    }
+
+    @Override
+    public DocumentProcessDetail create(DocumentProcessCreateForm documentProcessCreateForm) {
 
         // Process
         DocumentProcessEntity documentProcessEntity = new DocumentProcessEntity();
         documentProcessEntity.setName(documentProcessCreateForm.getName());
         documentProcessEntity.setDescription(documentProcessCreateForm.getDescription());
-        DocumentProcessEntity savedDocumentProcessEntity = documentProcessRepository.save(documentProcessEntity);
+        DocumentProcessEntity savedDocumentProcessEntity = documentProcessRepository.saveAndFlush(documentProcessEntity);
 
         Map<Integer, ProcessStepEntity> map = new HashMap<>();
 
@@ -64,7 +72,7 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
         }
 
         savedDocumentProcessEntity.setFirstStep(map.get(documentProcessCreateForm.getFirstStepTemporaryId()));
-        documentProcessRepository.save(savedDocumentProcessEntity);
+        documentProcessRepository.saveAndFlush(savedDocumentProcessEntity);
 
         // Outcome
         for (ProcessStepCreateForm processStepCreateForm : documentProcessCreateForm.getSteps()) {
@@ -78,9 +86,19 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
                 if (stepOutcomeEntity.getLastStep() == false) {
                     stepOutcomeEntity.setNextStep(map.get(stepOutcomeCreateForm.getNextStepTemporaryId()));
                 }
-                stepOutcomeRepository.save(stepOutcomeEntity);
+                stepOutcomeRepository.saveAndFlush(stepOutcomeEntity);
             }
         }
+
+        DocumentProcessEntity savedDocumentProcessEntity2 = documentProcessRepository.findById(savedDocumentProcessEntity.getId())
+                .orElseThrow(() -> new EntityNotFoundException(savedDocumentProcessEntity.getId(), "DocumentProcess"));
+        System.out.println(savedDocumentProcessEntity2.getSteps());
+
+        DocumentProcessDetail savedDocumentProcessDetail = documentProcessRepository.findDetailById(
+                savedDocumentProcessEntity.getId()).orElseThrow(
+                () -> new EntityNotFoundException(savedDocumentProcessEntity.getId(), "DocumentProcess")
+        );
+        return savedDocumentProcessDetail;
     }
 
     @Override

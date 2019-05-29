@@ -2,6 +2,8 @@ package vn.edu.fpt.cpdm.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
+import vn.edu.fpt.cpdm.models.outsiders.OutsiderDetail;
 import vn.edu.fpt.cpdm.models.outsiders.OutsiderSummary;
 import vn.edu.fpt.cpdm.repositories.OutsiderRepository;
 import vn.edu.fpt.cpdm.services.OutsiderService;
@@ -21,5 +23,12 @@ public class OutsiderServiceImpl implements OutsiderService {
     @Override
     public List<OutsiderSummary> findAllSummaryByNameContainsOrCodeContains(String name, String code) {
         return outsiderRepository.findAllSummaryByNameContainsOrCodeContains(name, code);
+    }
+
+    @Override
+    public OutsiderDetail findDetailById(Integer id) {
+        return outsiderRepository.findDetailById(id).orElseThrow(
+                () -> new EntityNotFoundException(id, "Outsider")
+        );
     }
 }
