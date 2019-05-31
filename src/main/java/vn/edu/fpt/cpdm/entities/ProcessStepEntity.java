@@ -16,7 +16,7 @@ public class ProcessStepEntity {
     private Integer id;
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Basic
@@ -24,11 +24,11 @@ public class ProcessStepEntity {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "executor_id", referencedColumnName = "id")
+    @JoinColumn(name = "executor_id", referencedColumnName = "id", nullable = false)
     private UserEntity executor;
 
     @ManyToOne
-    @JoinColumn(name = "process_id", referencedColumnName = "id")
+    @JoinColumn(name = "process_id", referencedColumnName = "id", nullable = false)
     private DocumentProcessEntity process;
 
     @OneToMany(mappedBy = "step")

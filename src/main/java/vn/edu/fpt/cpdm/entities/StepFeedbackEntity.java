@@ -16,7 +16,7 @@ public class StepFeedbackEntity {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "step_outcome_id", referencedColumnName = "id")
+    @JoinColumn(name = "step_outcome_id", referencedColumnName = "id", nullable = false)
     private StepOutcomeEntity outcome;
 
     @Basic
@@ -24,14 +24,14 @@ public class StepFeedbackEntity {
     private String feedback;
 
     @ManyToOne
-    @JoinColumn(name = "document_id", referencedColumnName = "id")
+    @JoinColumn(name = "document_id", referencedColumnName = "id", nullable = false)
     private DocumentEntity document;
 
     @Basic
-    @Column(name = "arrival_time")
+    @Column(name = "arrival_time", nullable = false)
     private LocalDateTime arrivalTime;
 
     @Basic
-    @Column(name = "completed_time")
+    @Column(name = "completed_time", nullable = false)
     private LocalDateTime completedTime;
 }

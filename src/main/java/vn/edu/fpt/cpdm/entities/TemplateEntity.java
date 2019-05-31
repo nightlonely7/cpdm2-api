@@ -16,7 +16,7 @@ public class TemplateEntity {
     private Integer id;
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Basic
@@ -25,7 +25,7 @@ public class TemplateEntity {
     private String template;
 
     @Basic
-    @Column(name = "available")
+    @Column(name = "available", nullable = false)
     private Boolean available;
 
     @PrePersist

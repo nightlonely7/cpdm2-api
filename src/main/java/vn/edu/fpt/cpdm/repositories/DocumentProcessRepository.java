@@ -10,6 +10,6 @@ import vn.edu.fpt.cpdm.models.processes.DocumentProcessSummary;
 import java.util.Optional;
 
 public interface DocumentProcessRepository extends JpaRepository<DocumentProcessEntity, Integer> {
-    Page<DocumentProcessSummary> findAllByActiveTrueOrderByCreatedTimeDesc(Pageable pageable);
+    Page<DocumentProcessSummary> findAllByAvailableTrueOrderByCreatedTimeDesc(Pageable pageable);
     Optional<DocumentProcessDetail> findDetailById(Integer id);
 }

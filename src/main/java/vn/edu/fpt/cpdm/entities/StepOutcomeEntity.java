@@ -15,11 +15,11 @@ public class StepOutcomeEntity {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "step_id", referencedColumnName = "id")
+    @JoinColumn(name = "step_id", referencedColumnName = "id", nullable = false)
     private ProcessStepEntity step;
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Basic
@@ -31,10 +31,10 @@ public class StepOutcomeEntity {
     private ProcessStepEntity nextStep;
 
     @Basic
-    @Column(name = "last_step")
+    @Column(name = "last_step", nullable = false)
     private Boolean lastStep;
 
     @Basic
-    @Column(name = "main")
+    @Column(name = "main", nullable = false)
     private Boolean main;
 }

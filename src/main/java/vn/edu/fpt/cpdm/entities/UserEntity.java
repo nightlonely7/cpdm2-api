@@ -21,25 +21,33 @@ public class UserEntity implements UserDetails {
     private Integer id;
 
     @Basic
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Basic
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Basic
-    @Column(name = "role")
-    private String role;
+    @Column(name = "process_role", nullable = false)
+    private String processRole;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = false)
+    private DepartmentEntity department;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    private RoleEntity role;
 
     @Basic
-    @Column(name = "available")
+    @Column(name = "available", nullable = false)
     private Boolean available;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(this.role));
+        grantedAuthorities.add(new SimpleGrantedAuthority(this.role.getName()));
         return grantedAuthorities;
     }
 
@@ -61,5 +69,10 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.available;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.available = Boolean.TRUE;
     }
 }

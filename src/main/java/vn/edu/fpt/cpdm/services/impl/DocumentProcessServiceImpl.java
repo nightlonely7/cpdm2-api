@@ -103,6 +103,6 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
 
     @Override
     public Page<DocumentProcessSummary> findAllSummary(Pageable pageable) {
-        return documentProcessRepository.findAllByActiveTrueOrderByCreatedTimeDesc(pageable);
+        return documentProcessRepository.findAllByAvailableTrueOrderByCreatedTimeDesc(pageable);
     }
 }
