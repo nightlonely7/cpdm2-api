@@ -10,7 +10,10 @@ import java.util.Optional;
 
 public interface OutsiderRepository extends JpaRepository<OutsiderEntity, Integer> {
 
-    List<OutsiderSummary> findAllSummaryByNameContainsOrCodeContains(String name, String code);
+    List<OutsiderSummary> findAllSummaryByNameContainsOrCodeContainsAndAvailableTrue(String name, String code);
 
-    Optional<OutsiderDetail> findDetailById(Integer id);
+    Optional<OutsiderDetail> findDetailByIdAndAvailableTrue(Integer id);
+
+    boolean existsByCode(String code);
+
 }
