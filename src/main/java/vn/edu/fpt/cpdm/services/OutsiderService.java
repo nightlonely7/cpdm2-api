@@ -18,4 +18,6 @@ public interface OutsiderService {
     OutsiderDetail update(Integer id, OutsiderUpdateForm updateForm);
 
     void delete(Integer id);
+
+    
 }
