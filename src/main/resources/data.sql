@@ -1,13 +1,19 @@
 INSERT INTO role (name) VALUES ('ROLE_ADMIN'), ('ROLE_MANAGER'), ('ROLE_DOCUMENT_WRITER'), ('ROLE_STAFF');
 
-INSERT INTO user (username, password, role_id, available) VALUES
-('quang', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 1, true),
-('khanh', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 2, true),
-('nhan', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 2, true);
+INSERT INTO department (code, name, created_time, available) VALUES
+('P01', 'Phòng ban 01', '2017-09-20 07:22:12', true),
+('P02', 'Phòng ban 02', '2017-10-20 07:22:12', true);
+
+INSERT INTO user (username, password, department_id, role_id, process_role, available) VALUES
+('quang', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 1, 1, 'Giám đốc', true),
+('khanh', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 2, 1, 'Trưởng phòng tài chính', true),
+('nhan', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 2, 2, 'Trưởng phòng nội vụ', true);
+
 
 INSERT INTO outsider(code, name, contact_data) VALUES
 ('code1', 'name1', 'contact_data1'),
 ('code2', 'name2', 'contact_data2');
+
 
 INSERT INTO document (code, outsider_id, title, summary, detail, arrival_date, created_time, last_modified_time, started_processing, processed) VALUES
 ('code1', 1, 'title1', 'summary1111 111111 111111 1111111 11111 1111111 111111111 111111111 11111111 1111 11111 11111111 11111111 111111',

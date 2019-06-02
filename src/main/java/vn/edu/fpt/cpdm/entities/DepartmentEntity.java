@@ -28,12 +28,12 @@ public class DepartmentEntity {
     private String description;
 
     @Basic
-    @Column(name = "available", nullable = false)
-    private Boolean available;
-
-    @Basic
     @Column(name = "created_time", nullable = false)
     private LocalDateTime createdTime;
+
+    @Basic
+    @Column(name = "available", nullable = false)
+    private Boolean available;
 
     @PrePersist
     public void prePersist() {

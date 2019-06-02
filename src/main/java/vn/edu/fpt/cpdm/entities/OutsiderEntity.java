@@ -27,5 +27,4 @@ public class OutsiderEntity {
     @Column(name = "contact_data")
     private String contactData;
 
-
 }
