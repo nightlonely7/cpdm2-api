@@ -8,6 +8,7 @@ public class EntityNotFoundException extends RuntimeException {
 
     private Integer id;
     private String entity;
+    private String name;
 
     public EntityNotFoundException(Integer id, String entity) {
         super(null, null, true, false);
@@ -15,9 +16,19 @@ public class EntityNotFoundException extends RuntimeException {
         this.entity = entity;
     }
 
+    public EntityNotFoundException(String name, String entity) {
+        super(null, null, true, false);
+        this.name = name;
+        this.entity = entity;
+    }
+
     @Override
     public String getMessage() {
-
-        return entity + " with id '" + id + "' is not found!";
+        if(name==null){
+            return entity + " with id '" + id + "' is not found!";
+        }
+        else{
+            return entity + " with name '" + name + "' is not found!";
+        }
     }
 }
