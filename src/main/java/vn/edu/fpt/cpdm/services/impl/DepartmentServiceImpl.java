@@ -40,10 +40,10 @@ public class DepartmentServiceImpl implements DepartmentService{
     @Override
     public DepartmentSummary create(DepartmentCreateForm departmentCreateForm) {
         if(departmentRepository.existsByCode(departmentCreateForm.getCode())){
-            throw new ConflictException("This department's code '" + departmentCreateForm.getCode() + "' is already existed!");
+            throw new ConflictException("Mã phòng ban '" + departmentCreateForm.getCode() + "' đã tồn tại!");
         }
         if(departmentRepository.existsByName(departmentCreateForm.getName())){
-            throw new ConflictException("This department's name '" + departmentCreateForm.getName() + "' is already existed!");
+            throw new ConflictException("Tên phòng ban '" + departmentCreateForm.getName() + "' đã tồn tại!");
         }
 
         ModelMapper modelMapper = new ModelMapper();
@@ -55,15 +55,17 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     @Override
     public DepartmentSummary update(Integer id, DepartmentUpdateForm departmentUpdateForm) {
-        if(departmentRepository.existsByCode(departmentUpdateForm.getCode())){
-            throw new ConflictException("This department's code '" + departmentUpdateForm.getCode() + "' is already existed!");
-        }
-        if(departmentRepository.existsByName(departmentUpdateForm.getName())){
-            throw new ConflictException("This department's name '" + departmentUpdateForm.getName() + "' is already existed!");
-        }
         DepartmentEntity departmentEntity = departmentRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(id,"Department")
         );
+
+        if(!departmentEntity.getCode().equals(departmentUpdateForm.getCode()) && departmentRepository.existsByCode(departmentUpdateForm.getCode())){
+            throw new ConflictException("Mã phòng ban '" + departmentUpdateForm.getCode() + "' đã tồn tại!");
+        }
+        if(!departmentEntity.getName().equals(departmentUpdateForm.getName()) && departmentRepository.existsByName(departmentUpdateForm.getName())){
+            throw new ConflictException("Tên phòng ban '" + departmentUpdateForm.getName() + "' đã tồn tại!");
+        }
+
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
         modelMapper.map(departmentUpdateForm,departmentEntity);

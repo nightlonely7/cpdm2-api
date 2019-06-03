@@ -6,9 +6,8 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class DepartmentUpdateForm {
-    @NotBlank
     String code;
-    @NotBlank
     String name;
     String description;
+    Boolean available;
 }
