@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.cpdm.entities.DocumentEntity;
 import vn.edu.fpt.cpdm.entities.DocumentFileEntity;
 import vn.edu.fpt.cpdm.entities.UserEntity;
-import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
+import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.forms.documents.files.DocumentFileCreateForm;
 import vn.edu.fpt.cpdm.models.documents.files.DocumentFileDetail;
 import vn.edu.fpt.cpdm.repositories.DocumentFileRepository;
@@ -15,6 +15,7 @@ import vn.edu.fpt.cpdm.services.DocumentFileService;
 import vn.edu.fpt.cpdm.services.FileStorageService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class DocumentFileServiceImpl implements DocumentFileService {
@@ -38,7 +39,7 @@ public class DocumentFileServiceImpl implements DocumentFileService {
     @Override
     public DocumentFileDetail create(Integer documentId, DocumentFileCreateForm documentFileCreateForm) {
         DocumentEntity documentEntity = documentRepository.findById(documentId).orElseThrow(
-                () -> new EntityNotFoundException(documentId, "Document")
+                () -> new EntityIdNotFoundException(documentId, "Document")
         );
         UserEntity creator = authenticationService.getCurrentLoggedUser();
         DocumentFileEntity documentFileEntity = new DocumentFileEntity();
@@ -46,16 +47,31 @@ public class DocumentFileServiceImpl implements DocumentFileService {
         documentFileEntity.setDocument(documentEntity);
         documentFileEntity.setFilename(documentFileCreateForm.getFilename());
 
-        String storedFilename = documentFileCreateForm.getFile().getOriginalFilename() +
-                "_" + LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        String storedFilename = creator.getUsername() + "_" + now.toString()
+                .replaceFirst("T", " ")
+                .replaceFirst(":", "h")
+                .replaceFirst(":", "m")
+                .replaceFirst("\\.", "s")
+                + "_" + documentFileCreateForm.getFile().getOriginalFilename();
         documentFileEntity.setStoredFilename(storedFilename);
 
         documentFileEntity.setDescription(documentFileCreateForm.getDescription());
+        documentFileEntity.setCreatedTime(now);
+        documentFileEntity.setLastModifiedTime(now);
         DocumentFileEntity savedDocumentFileEntity = documentFileRepository.save(documentFileEntity);
         DocumentFileDetail savedDocumentFileDetail = documentFileRepository.
                 findDetailByIdAndAvailableTrue(savedDocumentFileEntity.getId())
-                .orElseThrow(() -> new EntityNotFoundException(savedDocumentFileEntity.getId(), "Document File"));
-        fileStorageService.store(documentFileCreateForm.getFile(), documentFileCreateForm.getFilename());
+                .orElseThrow(() -> new EntityIdNotFoundException(savedDocumentFileEntity.getId(), "Document File"));
+        fileStorageService.store(documentFileCreateForm.getFile(), storedFilename);
         return savedDocumentFileDetail;
+    }
+
+    @Override
+    public List<DocumentFileDetail> findAllDetailByDocumentId(Integer documentId) {
+        DocumentEntity documentEntity = documentRepository.findById(documentId).orElseThrow(
+                () -> new EntityIdNotFoundException(documentId, "Document")
+        );
+        return documentFileRepository.findAllDetailByDocumentAndAvailableTrue(documentEntity);
     }
 }

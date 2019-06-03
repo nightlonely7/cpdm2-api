@@ -8,7 +8,7 @@ import vn.edu.fpt.cpdm.entities.DocumentProcessEntity;
 import vn.edu.fpt.cpdm.entities.ProcessStepEntity;
 import vn.edu.fpt.cpdm.entities.StepOutcomeEntity;
 import vn.edu.fpt.cpdm.entities.UserEntity;
-import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
+import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.forms.process.DocumentProcessCreateForm;
 import vn.edu.fpt.cpdm.forms.process.ProcessStepCreateForm;
 import vn.edu.fpt.cpdm.forms.process.StepOutcomeCreateForm;
@@ -42,7 +42,7 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
     @Override
     public DocumentProcessDetail findDetailById(Integer id) {
         return documentProcessRepository.findDetailById(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "DocumentProcess")
+                () -> new EntityIdNotFoundException(id, "DocumentProcess")
         );
     }
 
@@ -64,7 +64,7 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
             processStepEntity.setName(processStepCreateForm.getName());
             processStepEntity.setDescription(processStepCreateForm.getDescription());
             UserEntity executor = userRepository.findById(processStepCreateForm.getExecutorId()).orElseThrow(
-                    () -> new EntityNotFoundException(processStepCreateForm.getExecutorId(), "User")
+                    () -> new EntityIdNotFoundException(processStepCreateForm.getExecutorId(), "User")
             );
             processStepEntity.setExecutor(executor);
             ProcessStepEntity savedProcessStepEntity = processStepRepository.saveAndFlush(processStepEntity);
@@ -91,12 +91,12 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
         }
 
         DocumentProcessEntity savedDocumentProcessEntity2 = documentProcessRepository.findById(savedDocumentProcessEntity.getId())
-                .orElseThrow(() -> new EntityNotFoundException(savedDocumentProcessEntity.getId(), "DocumentProcess"));
+                .orElseThrow(() -> new EntityIdNotFoundException(savedDocumentProcessEntity.getId(), "DocumentProcess"));
         System.out.println(savedDocumentProcessEntity2.getSteps());
 
         DocumentProcessDetail savedDocumentProcessDetail = documentProcessRepository.findDetailById(
                 savedDocumentProcessEntity.getId()).orElseThrow(
-                () -> new EntityNotFoundException(savedDocumentProcessEntity.getId(), "DocumentProcess")
+                () -> new EntityIdNotFoundException(savedDocumentProcessEntity.getId(), "DocumentProcess")
         );
         return savedDocumentProcessDetail;
     }

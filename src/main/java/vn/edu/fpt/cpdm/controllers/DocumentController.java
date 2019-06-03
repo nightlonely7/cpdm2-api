@@ -9,9 +9,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.cpdm.exceptions.ModelNotValidException;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
+import vn.edu.fpt.cpdm.forms.documents.files.DocumentFileCreateForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
 import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
 import vn.edu.fpt.cpdm.models.documents.DocumentSummary;
+import vn.edu.fpt.cpdm.models.documents.files.DocumentFileDetail;
+import vn.edu.fpt.cpdm.services.DocumentFileService;
 import vn.edu.fpt.cpdm.services.DocumentService;
 import vn.edu.fpt.cpdm.utils.ModelErrorMessage;
 
@@ -23,10 +26,13 @@ import java.util.List;
 public class DocumentController {
 
     private final DocumentService documentService;
+    private final DocumentFileService documentFileService;
 
     @Autowired
-    public DocumentController(DocumentService documentService) {
+    public DocumentController(DocumentService documentService,
+                              DocumentFileService documentFileService) {
         this.documentService = documentService;
+        this.documentFileService = documentFileService;
     }
 
     @GetMapping("/executing")
@@ -42,7 +48,12 @@ public class DocumentController {
         return ResponseEntity.ok(documentService.findDetailById(id));
     }
 
-    @GetMapping("/creates")
+    @GetMapping("/{id}/files")
+    public ResponseEntity<List<DocumentFileDetail>> findFileDetails(@PathVariable("id") Integer documentId) {
+        return ResponseEntity.ok(documentFileService.findAllDetailByDocumentId(documentId));
+    }
+
+    @GetMapping("/search/creates")
     public ResponseEntity<Page<DocumentSummary>> findAllCreatedDocuments(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(documentService.findAllSummary(pageable));
     }
@@ -56,6 +67,19 @@ public class DocumentController {
         }
 
         return ResponseEntity.ok(documentService.create(documentCreateForm));
+    }
+
+    @PostMapping("/{id}/files")
+    public ResponseEntity<DocumentFileDetail> createDocumentFile(
+            @PathVariable("id") Integer documentId,
+            @Valid DocumentFileCreateForm documentFileCreateForm,
+            BindingResult result) {
+        if (result.hasErrors()) {
+            String message = ModelErrorMessage.build(result);
+            throw new ModelNotValidException(message);
+        }
+
+        return ResponseEntity.ok(documentFileService.create(documentId, documentFileCreateForm));
     }
 
     @PatchMapping("/{id}/put_into_process")

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.cpdm.entities.OutsiderEntity;
 import vn.edu.fpt.cpdm.exceptions.ConflictException;
-import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
+import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.forms.outsiders.OutsiderCreateForm;
 import vn.edu.fpt.cpdm.forms.outsiders.OutsiderUpdateForm;
 import vn.edu.fpt.cpdm.models.outsiders.OutsiderDetail;
@@ -32,7 +32,7 @@ public class OutsiderServiceImpl implements OutsiderService {
     @Override
     public OutsiderDetail findDetailById(Integer id) {
         return outsiderRepository.findDetailByIdAndAvailableTrue(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "Outsider")
+                () -> new EntityIdNotFoundException(id, "Outsider")
         );
     }
 
@@ -47,14 +47,14 @@ public class OutsiderServiceImpl implements OutsiderService {
         entity.setContactData(createForm.getContactData());
         OutsiderEntity saved = outsiderRepository.save(entity);
         return outsiderRepository.findDetailByIdAndAvailableTrue(saved.getId()).orElseThrow(
-                () -> new EntityNotFoundException(saved.getId(), "Outsider")
+                () -> new EntityIdNotFoundException(saved.getId(), "Outsider")
         );
     }
 
     @Override
     public OutsiderDetail update(Integer id, OutsiderUpdateForm updateForm) {
         OutsiderEntity entity = outsiderRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "Outsider")
+                () -> new EntityIdNotFoundException(id, "Outsider")
         );
         if(!updateForm.getCode().equals(entity.getCode()) && outsiderRepository.existsByCode(updateForm.getCode())){
             throw new ConflictException("This outsider's code '" + updateForm.getCode() + "' already exist");
@@ -64,14 +64,14 @@ public class OutsiderServiceImpl implements OutsiderService {
         entity.setContactData(updateForm.getContactData());
         outsiderRepository.save(entity);
         return outsiderRepository.findDetailByIdAndAvailableTrue(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "Outsider")
+                () -> new EntityIdNotFoundException(id, "Outsider")
         );
     }
 
     @Override
     public void delete(Integer id) {
         OutsiderEntity entity = outsiderRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "Outsider")
+                () -> new EntityIdNotFoundException(id, "Outsider")
         );
         entity.setAvailable(false);
         outsiderRepository.save(entity);

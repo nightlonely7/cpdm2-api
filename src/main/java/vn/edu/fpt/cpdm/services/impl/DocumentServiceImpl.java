@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.cpdm.entities.*;
 import vn.edu.fpt.cpdm.exceptions.BadRequestException;
 import vn.edu.fpt.cpdm.exceptions.ConflictException;
-import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
+import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
 import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
@@ -52,7 +52,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public DocumentDetail findDetailById(Integer id) {
         return documentRepository.findDetailById(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "Document")
+                () -> new EntityIdNotFoundException(id, "Document")
         );
     }
 
@@ -79,11 +79,11 @@ public class DocumentServiceImpl implements DocumentService {
         documentEntity.setEffectiveDate(documentCreateForm.getEffectiveDate());
         documentEntity.setEffectiveEndDate(documentCreateForm.getEffectiveEndDate());
         documentEntity.setOutsider(outsiderRepository.findById(documentCreateForm.getOutsiderId()).orElseThrow(
-                () -> new EntityNotFoundException(documentCreateForm.getOutsiderId(), "Outsider")
+                () -> new EntityIdNotFoundException(documentCreateForm.getOutsiderId(), "Outsider")
         ));
         DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
         DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
-                () -> new EntityNotFoundException(savedDocumentEntity.getId(), "Document")
+                () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")
         );
 
         return savedDocumentDetail;
@@ -92,10 +92,10 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public DocumentDetail putIntoProcess(Integer documentId, Integer processId) {
         DocumentEntity documentEntity = documentRepository.findById(documentId).orElseThrow(
-                () -> new EntityNotFoundException(documentId, "Document")
+                () -> new EntityIdNotFoundException(documentId, "Document")
         );
         DocumentProcessEntity documentProcessEntity = documentProcessRepository.findById(processId).orElseThrow(
-                () -> new EntityNotFoundException(processId, "DocumentProcess")
+                () -> new EntityIdNotFoundException(processId, "DocumentProcess")
         );
         documentEntity.setProcess(documentProcessEntity);
         documentEntity.setCurrentStep(documentProcessEntity.getFirstStep());
@@ -104,7 +104,7 @@ public class DocumentServiceImpl implements DocumentService {
         documentEntity.setProcessed(Boolean.FALSE);
         DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
         DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
-                () -> new EntityNotFoundException(savedDocumentEntity.getId(), "Document")
+                () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")
         );
         return savedDocumentDetail;
     }
@@ -114,7 +114,7 @@ public class DocumentServiceImpl implements DocumentService {
 
         DocumentEntity documentEntity = documentRepository
                 .findById(documentId).orElseThrow(
-                        () -> new EntityNotFoundException(documentId, "Document")
+                        () -> new EntityIdNotFoundException(documentId, "Document")
                 );
 
         if (documentEntity.getProcessed()) {
@@ -126,7 +126,7 @@ public class DocumentServiceImpl implements DocumentService {
 
         StepOutcomeEntity stepOutcomeEntity = stepOutcomeRepository
                 .findById(outcomeId).orElseThrow(
-                        () -> new EntityNotFoundException(outcomeId, "StepOutcome")
+                        () -> new EntityIdNotFoundException(outcomeId, "StepOutcome")
                 );
         ProcessStepEntity currentStep = documentEntity.getCurrentStep();
         if (stepOutcomeEntity.getStep().equals(currentStep) == false

@@ -9,7 +9,7 @@ import vn.edu.fpt.cpdm.entities.DepartmentEntity;
 import vn.edu.fpt.cpdm.entities.RoleEntity;
 import vn.edu.fpt.cpdm.entities.UserEntity;
 import vn.edu.fpt.cpdm.exceptions.ConflictException;
-import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
+import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.exceptions.NotFoundException;
 import vn.edu.fpt.cpdm.forms.users.UserCreateForm;
 import vn.edu.fpt.cpdm.forms.users.UserUpdateForm;
@@ -20,7 +20,6 @@ import vn.edu.fpt.cpdm.repositories.UserRepository;
 import vn.edu.fpt.cpdm.services.AuthenticationService;
 import vn.edu.fpt.cpdm.services.UserService;
 
-import javax.management.relation.Role;
 import java.util.List;
 
 @Service
@@ -63,37 +62,42 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(encodedPassword);
 
         DepartmentEntity departmentEntity = departmentRepository.findById(userCreateForm.getDepartmentId()).orElseThrow(
-                () -> new EntityNotFoundException(userCreateForm.getDepartmentId(), "Department")
+                () -> new EntityIdNotFoundException(userCreateForm.getDepartmentId(), "Department")
         );
 
         userEntity.setDepartment(departmentEntity);
 
         RoleEntity role = roleRepository.findByName("ROLE_STAFF").orElseThrow(
-                () -> new EntityNotFoundException("ROLE_STAFF", "Role")
+                () -> new EntityIdNotFoundException("ROLE_STAFF", "Role")
         );
 
         userEntity.setRole(role);
         UserEntity savedUserEntity = userRepository.save(userEntity);
         return userRepository.findByIdAndAvailableTrue(savedUserEntity.getId()).orElseThrow(
-                () -> new EntityNotFoundException(savedUserEntity.getId(), "User")
+                () -> new EntityIdNotFoundException(savedUserEntity.getId(), "User")
         );
     }
 
     @Override
     public UserBasic update(Integer id, UserUpdateForm userUpdateForm) {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "User")
+                () -> new EntityIdNotFoundException(id, "User")
         );
 
         DepartmentEntity department = departmentRepository.findById(userUpdateForm.getDepartmentId()).orElseThrow(
-                () -> new EntityNotFoundException(userUpdateForm.getDepartmentId(), "Department")
+                () -> new EntityIdNotFoundException(userUpdateForm.getDepartmentId(), "Department")
         );
 
-        RoleEntity roleManager = roleRepository.findById(userUpdateForm.getRoleId()).orElseThrow(
-                () -> new EntityNotFoundException(id, "Role")
+        RoleEntity role = roleRepository.findById(userUpdateForm.getRoleId()).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "Role")
         );
-        RoleEntity roleStaff = roleRepository.findByName("ROLE_STAFF").orElseThrow(
-                () -> new EntityNotFoundException("ROLE_STAFF", "Role")
+        RoleEntity roleManager = roleRepository.findById(userUpdateForm.getRoleId()).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "Role")
+        );
+
+        String staff = "ROLE_STAFF";
+        RoleEntity roleStaff = roleRepository.findByName(staff).orElseThrow(
+                () -> new NotFoundException("Role with name '" + staff + "' is not found!")
         );
         UserEntity oldManager = userRepository.findByRoleAndDepartment(roleManager, department).orElseThrow(
                 () -> new NotFoundException("abcxyz")
@@ -104,7 +108,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userEntity);
 
         return userRepository.findByIdAndAvailableTrue(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "User")
+                () -> new EntityIdNotFoundException(id, "User")
         );
     }
 
@@ -123,7 +127,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBasic findBasicById(Integer id) {
         return userRepository.findByIdAndAvailableTrue(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "User")
+                () -> new EntityIdNotFoundException(id, "User")
         );
     }
 
@@ -135,16 +139,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBasic findManagerByDepartmentId(Integer departmentId) {
         RoleEntity roleEntity = roleRepository.findByName("ROLE_MANAGER").orElseThrow(
-                () -> new EntityNotFoundException("ROLE_MANAGER", "Role")
+                () -> new EntityIdNotFoundException("ROLE_MANAGER", "Role")
         );
         DepartmentEntity departmentEntity = departmentRepository.findById(departmentId).orElseThrow(
-                () -> new EntityNotFoundException(departmentId, "Department")
+                () -> new EntityIdNotFoundException(departmentId, "Department")
         );
         UserEntity oldManager = userRepository.findByRoleAndDepartment(roleEntity, departmentEntity).orElseThrow(
                 () -> new NotFoundException("ABCXYZ")
         );
         return userRepository.findByIdAndAvailableTrue(oldManager.getId()).orElseThrow(
-                () -> new EntityNotFoundException(oldManager.getId(), "User")
+                () -> new EntityIdNotFoundException(oldManager.getId(), "User")
         );
     }
 }

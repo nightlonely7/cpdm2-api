@@ -8,13 +8,11 @@ import vn.edu.fpt.cpdm.exceptions.BadRequestException;
 import vn.edu.fpt.cpdm.forms.users.UserCreateForm;
 import vn.edu.fpt.cpdm.forms.users.UserUpdateForm;
 import vn.edu.fpt.cpdm.models.users.UserBasic;
-import vn.edu.fpt.cpdm.services.StepOutcomeService;
 import vn.edu.fpt.cpdm.services.UserService;
 import vn.edu.fpt.cpdm.utils.ModelErrorMessage;
 
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
-import javax.xml.ws.RespectBinding;
 import java.util.List;
 
 @RequestMapping("/users")

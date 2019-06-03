@@ -50,8 +50,5 @@ public class DocumentFileEntity {
     @PrePersist
     void prePersist() {
         this.available = Boolean.TRUE;
-        LocalDateTime now = LocalDateTime.now();
-        this.createdTime = now;
-        this.lastModifiedTime = now;
     }
 }

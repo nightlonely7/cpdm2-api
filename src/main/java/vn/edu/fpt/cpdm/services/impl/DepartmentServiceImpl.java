@@ -7,15 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.cpdm.entities.DepartmentEntity;
 import vn.edu.fpt.cpdm.exceptions.ConflictException;
-import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
+import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.forms.departments.DepartmentCreateForm;
 import vn.edu.fpt.cpdm.forms.departments.DepartmentUpdateForm;
 import vn.edu.fpt.cpdm.models.departments.DepartmentSummary;
 import vn.edu.fpt.cpdm.repositories.DepartmentRepository;
 import vn.edu.fpt.cpdm.services.DepartmentService;
 import org.modelmapper.ModelMapper;
-
-import java.util.Optional;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService{
@@ -62,7 +60,7 @@ public class DepartmentServiceImpl implements DepartmentService{
             throw new ConflictException("This department's name '" + departmentUpdateForm.getName() + "' is already existed!");
         }
         DepartmentEntity departmentEntity = departmentRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(id,"Department")
+                () -> new EntityIdNotFoundException(id,"Department")
         );
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());

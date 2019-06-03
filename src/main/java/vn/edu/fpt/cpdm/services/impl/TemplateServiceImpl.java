@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.cpdm.entities.TemplateEntity;
 import vn.edu.fpt.cpdm.exceptions.ConflictException;
-import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
+import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.forms.templates.TemplateCreateForm;
 import vn.edu.fpt.cpdm.forms.templates.TemplateUpdateForm;
 import vn.edu.fpt.cpdm.models.NameOnlyModel;
@@ -27,7 +27,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public TemplateDetail findDetailById(Integer id) {
         return templateRepository.findDetailByIdAndAvailableTrue(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "Template")
+                () -> new EntityIdNotFoundException(id, "Template")
         );
     }
 
@@ -53,7 +53,7 @@ public class TemplateServiceImpl implements TemplateService {
         templateEntity.setTemplate(templateCreateForm.getTemplate());
         TemplateEntity savedTemplateEntity = templateRepository.save(templateEntity);
         TemplateDetail templateDetail = templateRepository.findDetailByIdAndAvailableTrue(savedTemplateEntity.getId()).orElseThrow(
-                () -> new EntityNotFoundException(savedTemplateEntity.getId(), "Template")
+                () -> new EntityIdNotFoundException(savedTemplateEntity.getId(), "Template")
         );
 
         return templateDetail;
@@ -63,7 +63,7 @@ public class TemplateServiceImpl implements TemplateService {
     public TemplateDetail update(Integer id, TemplateUpdateForm templateUpdateForm) {
 
         TemplateEntity templateEntity = templateRepository.findByIdAndAvailableTrue(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "Template")
+                () -> new EntityIdNotFoundException(id, "Template")
         );
 
         if (!templateUpdateForm.getName().equals(templateEntity.getName())
@@ -75,7 +75,7 @@ public class TemplateServiceImpl implements TemplateService {
         templateEntity.setTemplate(templateUpdateForm.getTemplate());
         TemplateEntity savedTemplateEntity = templateRepository.save(templateEntity);
         TemplateDetail templateDetail = templateRepository.findDetailByIdAndAvailableTrue(savedTemplateEntity.getId()).orElseThrow(
-                () -> new EntityNotFoundException(savedTemplateEntity.getId(), "Template")
+                () -> new EntityIdNotFoundException(savedTemplateEntity.getId(), "Template")
         );
 
         return templateDetail;
@@ -85,7 +85,7 @@ public class TemplateServiceImpl implements TemplateService {
     public void delete(Integer id) {
 
         TemplateEntity templateEntity = templateRepository.findByIdAndAvailableTrue(id).orElseThrow(
-                () -> new EntityNotFoundException(id, "Template")
+                () -> new EntityIdNotFoundException(id, "Template")
         );
 
         templateEntity.setAvailable(Boolean.FALSE);
