@@ -10,6 +10,7 @@ import vn.edu.fpt.cpdm.entities.RoleEntity;
 import vn.edu.fpt.cpdm.entities.UserEntity;
 import vn.edu.fpt.cpdm.exceptions.ConflictException;
 import vn.edu.fpt.cpdm.exceptions.EntityNotFoundException;
+import vn.edu.fpt.cpdm.exceptions.NotFoundException;
 import vn.edu.fpt.cpdm.forms.users.UserCreateForm;
 import vn.edu.fpt.cpdm.forms.users.UserUpdateForm;
 import vn.edu.fpt.cpdm.models.users.UserBasic;
@@ -19,6 +20,7 @@ import vn.edu.fpt.cpdm.repositories.UserRepository;
 import vn.edu.fpt.cpdm.services.AuthenticationService;
 import vn.edu.fpt.cpdm.services.UserService;
 
+import javax.management.relation.Role;
 import java.util.List;
 
 @Service
@@ -82,14 +84,22 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(id, "User")
         );
+
         DepartmentEntity department = departmentRepository.findById(userUpdateForm.getDepartmentId()).orElseThrow(
-                () -> new EntityNotFoundException(id, "Department")
+                () -> new EntityNotFoundException(userUpdateForm.getDepartmentId(), "Department")
         );
 
-        RoleEntity role = roleRepository.findById(userUpdateForm.getRoleId()).orElseThrow(
+        RoleEntity roleManager = roleRepository.findById(userUpdateForm.getRoleId()).orElseThrow(
                 () -> new EntityNotFoundException(id, "Role")
         );
-        userEntity.setRole(role);
+        RoleEntity roleStaff = roleRepository.findByName("ROLE_STAFF").orElseThrow(
+                () -> new EntityNotFoundException("ROLE_STAFF", "Role")
+        );
+        UserEntity oldManager = userRepository.findByRoleAndDepartment(roleManager, department).orElseThrow(
+                () -> new NotFoundException("abcxyz")
+        );
+        oldManager.setRole(roleStaff);
+        userEntity.setRole(roleManager);
         userEntity.setDepartment(department);
         userRepository.save(userEntity);
 
@@ -120,5 +130,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserBasic> findAllExecutor() {
         return userRepository.findAllBy();
+    }
+
+    @Override
+    public UserBasic findManagerByDepartmentId(Integer departmentId) {
+        RoleEntity roleEntity = roleRepository.findByName("ROLE_MANAGER").orElseThrow(
+                () -> new EntityNotFoundException("ROLE_MANAGER", "Role")
+        );
+        DepartmentEntity departmentEntity = departmentRepository.findById(departmentId).orElseThrow(
+                () -> new EntityNotFoundException(departmentId, "Department")
+        );
+        UserEntity oldManager = userRepository.findByRoleAndDepartment(roleEntity, departmentEntity).orElseThrow(
+                () -> new NotFoundException("ABCXYZ")
+        );
+        return userRepository.findByIdAndAvailableTrue(oldManager.getId()).orElseThrow(
+                () -> new EntityNotFoundException(oldManager.getId(), "User")
+        );
     }
 }

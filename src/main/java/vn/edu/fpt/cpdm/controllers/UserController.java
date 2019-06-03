@@ -13,6 +13,7 @@ import vn.edu.fpt.cpdm.services.UserService;
 import vn.edu.fpt.cpdm.utils.ModelErrorMessage;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import javax.xml.ws.RespectBinding;
 import java.util.List;
 
@@ -52,5 +53,9 @@ public class UserController {
             throw new BadRequestException(message);
         }
         return ResponseEntity.ok(userService.update(id, userUpdateForm));
+    }
+    @GetMapping("/search/findManagerByDepartment")
+    public ResponseEntity<UserBasic> findManagerByDepartment(@PathParam("departmentId") Integer departmentId){
+        return ResponseEntity.ok(userService.findManagerByDepartmentId(departmentId));
     }
 }
