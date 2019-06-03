@@ -27,4 +27,13 @@ public class OutsiderEntity {
     @Column(name = "contact_data")
     private String contactData;
 
+    @Basic
+    @Column(name = "available", nullable = false)
+    private Boolean available;
+
+    @PrePersist
+    void prePersist() {
+        this.available = Boolean.TRUE;
+    }
+
 }
