@@ -80,11 +80,13 @@ public class UserServiceImpl implements UserService {
         );
         DepartmentEntity department = new DepartmentEntity();
 
+        //fix
         if (userUpdateForm.getDepartmentId() != null) {
             department.setId(userUpdateForm.getDepartmentId());
             userEntity.setDepartment(department);
         }
-        
+
+        //fix
         RoleEntity role = new RoleEntity();
         if (userUpdateForm.getRoleId() != null) {
             role.setId(userUpdateForm.getRoleId());
