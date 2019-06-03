@@ -3,6 +3,7 @@ package vn.edu.fpt.cpdm.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.cpdm.entities.DepartmentEntity;
 import vn.edu.fpt.cpdm.entities.RoleEntity;
@@ -22,12 +23,13 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    //private final
+    private final PasswordEncoder passwordEncoder;
     private final AuthenticationService authenticationService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, AuthenticationService authenticationService) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationService authenticationService) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.authenticationService = authenticationService;
     }
 
@@ -42,21 +44,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserBasic create(UserCreateForm userCreateForm) {
-        if(userRepository.existsByUsername(userCreateForm.getUsername())){
-            throw new ConflictException("This username '" + userCreateForm.getUsername()+  "' already exists.");
+        if (userRepository.existsByUsername(userCreateForm.getUsername())) {
+            throw new ConflictException("This username '" + userCreateForm.getUsername() + "' is already exists!");
         }
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(userCreateForm.getUsername());
-        userEntity.setPassword(userCreateForm.getPassword());
+
+        // encode password
+        String encodedPassword = passwordEncoder.encode(userCreateForm.getPassword());
+        userEntity.setPassword(encodedPassword);
+
+        //fix
         DepartmentEntity departmentEntity = new DepartmentEntity();
         departmentEntity.setId(userCreateForm.getDepartmentId());
+
+
         userEntity.setDepartment(departmentEntity);
+
+        //fix
         RoleEntity role = new RoleEntity();
         role.setId(4);
+
+
         userEntity.setRole(role);
-        UserEntity saved = userRepository.save(userEntity);
-        return userRepository.findByIdAndAvailableTrue(saved.getId()).orElseThrow(
-                () -> new EntityNotFoundException(saved.getId(), "User")
+        UserEntity savedUserEntity = userRepository.save(userEntity);
+        return userRepository.findByIdAndAvailableTrue(savedUserEntity.getId()).orElseThrow(
+                () -> new EntityNotFoundException(savedUserEntity.getId(), "User")
         );
     }
 
@@ -66,12 +79,14 @@ public class UserServiceImpl implements UserService {
                 () -> new EntityNotFoundException(id, "User")
         );
         DepartmentEntity department = new DepartmentEntity();
-        if(userUpdateForm.getDepartmentId()!=null){
+
+        if (userUpdateForm.getDepartmentId() != null) {
             department.setId(userUpdateForm.getDepartmentId());
             userEntity.setDepartment(department);
         }
+        
         RoleEntity role = new RoleEntity();
-        if(userUpdateForm.getRoleId()!=null){
+        if (userUpdateForm.getRoleId() != null) {
             role.setId(userUpdateForm.getRoleId());
             userEntity.setRole(role);
         }
@@ -102,7 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserBasic> findAllExecutor(){
+    public List<UserBasic> findAllExecutor() {
         return userRepository.findAllBy();
     }
 }
