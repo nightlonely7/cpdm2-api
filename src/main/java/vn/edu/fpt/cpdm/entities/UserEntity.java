@@ -29,7 +29,7 @@ public class UserEntity implements UserDetails {
     private String password;
 
     @Basic
-    @Column(name = "process_role", nullable = false)
+    @Column(name = "process_role")
     private String processRole;
 
     @ManyToOne

@@ -11,4 +11,5 @@ public interface DepartmentRepository extends JpaRepository<DepartmentEntity,Int
     Boolean existsByCode(String code);
     Boolean existsByName(String name);
     DepartmentSummary findSummaryById(Integer id);
+    DepartmentEntity findByName(String name);
 }

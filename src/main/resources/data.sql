@@ -9,11 +9,9 @@ INSERT INTO user (username, password, department_id, role_id, process_role, avai
 ('khanh', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 2, 1, 'Trưởng phòng tài chính', true),
 ('nhan', '$2a$11$JDbss487mfwgvAzx7g.6L.Y2hXwLh58861Q.wvLKIbfr0b9gDzh3u', 2, 2, 'Trưởng phòng nội vụ', true);
 
-
 INSERT INTO outsider(code, name, contact_data, available) VALUES
 ('code1', 'name1', 'contact_data1', true),
 ('code2', 'name2', 'contact_data2', true);
-
 
 INSERT INTO document (code, outsider_id, title, summary, detail, arrival_date, created_time, last_modified_time, started_processing, processed) VALUES
 ('code1', 1, 'title1', 'summary1111 111111 111111 1111111 11111 1111111 111111111 111111111 11111111 1111 11111 11111111 11111111 111111',

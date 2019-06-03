@@ -65,4 +65,9 @@ public class OutsiderController {
         outsiderService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/check/existsByCode")
+    public ResponseEntity<Boolean> checkExistByCode(@RequestParam("code") String code){
+        return ResponseEntity.ok(outsiderService.isExistByCode(code));
+    }
 }

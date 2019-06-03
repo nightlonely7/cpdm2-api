@@ -19,19 +19,39 @@ public class DocumentFileEntity {
     @JoinColumn(name = "document_id", referencedColumnName = "id", nullable = false)
     private DocumentEntity document;
 
-    @ManyToOne
-    @JoinColumn(name = "step_feedback_id", referencedColumnName = "id")
-    private StepFeedbackEntity stepFeedback;
+    @Basic
+    @Column(name = "filename", nullable = false)
+    private String filename;
 
     @Basic
-    @Column(name = "filename", nullable = false, unique = true)
-    private String filename;
+    @Column(name = "stored_filename", unique = true, nullable = false)
+    private String storedFilename;
 
     @Basic
     @Column(name = "description")
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false)
+    private UserEntity creator;
+
     @Basic
     @Column(name = "created_time", nullable = false)
     private LocalDateTime createdTime;
+
+    @Basic
+    @Column(name = "last_modified_time", nullable = false)
+    private LocalDateTime lastModifiedTime;
+
+    @Basic
+    @Column(name = "available")
+    private Boolean available;
+
+    @PrePersist
+    void prePersist() {
+        this.available = Boolean.TRUE;
+        LocalDateTime now = LocalDateTime.now();
+        this.createdTime = now;
+        this.lastModifiedTime = now;
+    }
 }

@@ -76,4 +76,12 @@ public class OutsiderServiceImpl implements OutsiderService {
         entity.setAvailable(false);
         outsiderRepository.save(entity);
     }
+
+    @Override
+    public boolean isExistByCode(String code) {
+        if(outsiderRepository.existsByCode(code)){
+            return true;
+        }
+        return false;
+    }
 }

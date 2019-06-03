@@ -19,5 +19,5 @@ public interface OutsiderService {
 
     void delete(Integer id);
 
-    
+    boolean isExistByCode(String code);
 }
