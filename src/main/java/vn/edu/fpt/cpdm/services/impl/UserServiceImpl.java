@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService {
                 () -> new EntityNotFoundException(id, "Department")
         );
 
-        //fix
         RoleEntity role = roleRepository.findById(userUpdateForm.getRoleId()).orElseThrow(
                 () -> new EntityNotFoundException(id, "Role")
         );

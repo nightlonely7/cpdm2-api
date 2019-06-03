@@ -20,8 +20,12 @@ public class DocumentFileEntity {
     private DocumentEntity document;
 
     @Basic
-    @Column(name = "filename", nullable = false, unique = true)
+    @Column(name = "filename", nullable = false)
     private String filename;
+
+    @Basic
+    @Column(name = "stored_filename", unique = true, nullable = false)
+    private String storedFilename;
 
     @Basic
     @Column(name = "description")
