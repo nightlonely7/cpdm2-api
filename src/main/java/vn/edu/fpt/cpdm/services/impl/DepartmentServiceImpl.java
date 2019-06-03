@@ -46,8 +46,8 @@ public class DepartmentServiceImpl implements DepartmentService{
 
         ModelMapper modelMapper = new ModelMapper();
         DepartmentEntity departmentEntity = modelMapper.map(departmentCreateForm,DepartmentEntity.class);
-        DepartmentEntity savedDeparmentEntity = departmentRepository.save(departmentEntity);
-        DepartmentSummary departmentSummary = departmentRepository.findSummaryById(savedDeparmentEntity.getId());
+        DepartmentEntity savedDepartmentEntity = departmentRepository.save(departmentEntity);
+        DepartmentSummary departmentSummary = departmentRepository.findSummaryById(savedDepartmentEntity.getId());
         return departmentSummary;
     }
 
@@ -67,8 +67,8 @@ public class DepartmentServiceImpl implements DepartmentService{
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
         modelMapper.map(departmentUpdateForm,departmentEntity);
-        DepartmentEntity savedDeparmentEntity = departmentRepository.save(departmentEntity);
-        DepartmentSummary departmentSummary = departmentRepository.findSummaryById(savedDeparmentEntity.getId());
+        DepartmentEntity savedDepartmentEntity = departmentRepository.save(departmentEntity);
+        DepartmentSummary departmentSummary = departmentRepository.findSummaryById(savedDepartmentEntity.getId());
         return departmentSummary;
     }
 }

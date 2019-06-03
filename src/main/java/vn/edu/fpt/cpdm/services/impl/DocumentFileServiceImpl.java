@@ -1,6 +1,7 @@
 package vn.edu.fpt.cpdm.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.cpdm.entities.DocumentEntity;
 import vn.edu.fpt.cpdm.entities.DocumentFileEntity;
@@ -73,5 +74,14 @@ public class DocumentFileServiceImpl implements DocumentFileService {
                 () -> new EntityIdNotFoundException(documentId, "Document")
         );
         return documentFileRepository.findAllDetailByDocumentAndAvailableTrue(documentEntity);
+    }
+
+    @Override
+    public Resource download(Integer id) {
+        DocumentFileEntity documentFileEntity = documentFileRepository.findById(id).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "Document File")
+        );
+        Resource resource = fileStorageService.loadFileAsResource(documentFileEntity.getStoredFilename());
+        return resource;
     }
 }

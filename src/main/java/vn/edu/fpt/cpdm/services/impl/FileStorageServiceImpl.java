@@ -27,35 +27,35 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public void store(MultipartFile file, String filename) {
+    public void store(MultipartFile file, String storedFilename) {
 
         try {
             // Check if the file's name contains invalid characters
-            if (filename.contains("..")) {
-                throw new BadRequestException("Sorry! Filename contains invalid path sequence " + filename);
+            if (storedFilename.contains("..")) {
+                throw new BadRequestException("Sorry! Filename contains invalid path sequence " + storedFilename);
             }
 
             // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(filename);
+            Path targetLocation = this.fileStorageLocation.resolve(storedFilename);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
         } catch (IOException ex) {
-            throw new BadRequestException("Could not store file " + filename + ". Please try again!");
+            throw new BadRequestException("Could not store file " + storedFilename + ". Please try again!");
         }
     }
 
     @Override
-    public Resource loadFileAsResource(String fileName) {
+    public Resource loadFileAsResource(String storedFilename) {
         try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Path filePath = this.fileStorageLocation.resolve(storedFilename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 return resource;
             } else {
-                throw new MyFileNotFoundException("File not found " + fileName);
+                throw new MyFileNotFoundException("File not found " + storedFilename);
             }
         } catch (MalformedURLException ex) {
-            throw new MyFileNotFoundException("File not found " + fileName);
+            throw new MyFileNotFoundException("File not found " + storedFilename);
         }
     }
 }
