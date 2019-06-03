@@ -50,7 +50,6 @@ public class DocumentFileServiceImpl implements DocumentFileService {
 
         LocalDateTime now = LocalDateTime.now();
         String storedFilename = creator.getUsername() + "_" + now.toString()
-                .replaceFirst("T", " ")
                 .replaceFirst(":", "h")
                 .replaceFirst(":", "m")
                 .replaceFirst("\\.", "s")
