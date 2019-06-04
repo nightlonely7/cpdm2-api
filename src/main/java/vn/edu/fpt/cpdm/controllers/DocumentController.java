@@ -35,7 +35,7 @@ public class DocumentController {
         this.documentFileService = documentFileService;
     }
 
-    @GetMapping("/executing")
+    @GetMapping("/search/executing")
     public ResponseEntity<Page<DocumentSummary>> findAllExecutingDocuments(@PageableDefault Pageable pageable) {
 
         Page<DocumentSummary> documentSummaries = documentService.findAllExecutingDocuments(pageable);
