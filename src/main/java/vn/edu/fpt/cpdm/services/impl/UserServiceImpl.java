@@ -151,4 +151,9 @@ public class UserServiceImpl implements UserService {
                 () -> new EntityIdNotFoundException(oldManager.getId(), "User")
         );
     }
+
+    @Override
+    public List<UserBasic> findAllDirector() {
+        return userRepository.findAllByRole_NameAndAvailableTrue("ROLE_ADMIN");
+    }
 }

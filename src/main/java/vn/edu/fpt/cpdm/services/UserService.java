@@ -22,4 +22,6 @@ public interface UserService extends UserDetailsService {
     List<UserBasic> findAllExecutor();
 
     UserBasic findManagerByDepartmentId(Integer departmentId);
+
+    List<UserBasic> findAllDirector();
 }
