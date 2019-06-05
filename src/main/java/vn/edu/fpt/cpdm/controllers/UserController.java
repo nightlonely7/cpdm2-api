@@ -56,4 +56,9 @@ public class UserController {
     public ResponseEntity<UserBasic> findManagerByDepartment(@PathParam("departmentId") Integer departmentId){
         return ResponseEntity.ok(userService.findManagerByDepartmentId(departmentId));
     }
+
+    @GetMapping("/search/findAllDirector")
+    public ResponseEntity<List<UserBasic>> findAllDirector(){
+        return ResponseEntity.ok(userService.findAllDirector());
+    }
 }

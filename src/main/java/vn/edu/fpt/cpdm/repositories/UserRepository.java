@@ -22,4 +22,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     List<UserEntity> findAllByDepartment(DepartmentEntity departmentEntity);
     Optional<UserEntity> findByRole(RoleEntity roleEntity);
     Optional<UserEntity> findByRoleAndDepartment(RoleEntity roleEntity, DepartmentEntity departmentEntity);
+    List<UserBasic> findAllByRole_NameAndAvailableTrue(String roleName);
 }
