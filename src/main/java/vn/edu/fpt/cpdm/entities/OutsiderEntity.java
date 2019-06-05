@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity(name = "Outsider")
+@Entity(name = "OutsiderEntity")
 @Table(name = "outsider")
 @Data
 public class OutsiderEntity {

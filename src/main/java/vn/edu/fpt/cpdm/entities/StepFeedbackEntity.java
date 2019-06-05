@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "StepFeedback")
+@Entity(name = "StepFeedbackEntity")
 @Table(name = "step_feedback")
 @Data
 public class StepFeedbackEntity {

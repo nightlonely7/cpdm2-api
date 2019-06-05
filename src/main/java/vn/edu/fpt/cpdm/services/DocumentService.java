@@ -3,6 +3,7 @@ package vn.edu.fpt.cpdm.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
+import vn.edu.fpt.cpdm.forms.documents.DocumentSearchForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
 import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
 import vn.edu.fpt.cpdm.models.documents.DocumentSummary;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public interface DocumentService {
 
-    Page<DocumentSummary> findAllSummary(Pageable pageable);
+    Page<DocumentSummary> findAllSummary(DocumentSearchForm documentSearchForm, Pageable pageable);
 
     DocumentDetail findDetailById(Integer id);
 
@@ -21,5 +22,5 @@ public interface DocumentService {
 
     void forwardProcess(Integer documentId, Integer outcomeId, FeedbackCreateForm feedbackCreateForm);
 
-    Page<DocumentSummary> findAllExecutingDocuments(Pageable pageable);
+    Page<DocumentSummary> findAllExecutingDocuments(DocumentSearchForm documentSearchForm, Pageable pageable);
 }

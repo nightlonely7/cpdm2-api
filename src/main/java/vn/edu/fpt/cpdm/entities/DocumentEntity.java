@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity(name = "Document")
+@Entity(name = "DocumentEntity")
 @Table(name = "document")
 @Data
 public class DocumentEntity {
@@ -85,10 +85,15 @@ public class DocumentEntity {
     @Column(name = "last_modified_time", nullable = false)
     private LocalDateTime lastModifiedTime;
 
+    @Basic
+    @Column(name = "available", nullable = false)
+    private Boolean available;
+
     @PrePersist
     public void prePersist() {
         this.startedProcessing = Boolean.FALSE;
         this.processed = Boolean.FALSE;
+        this.available = Boolean.TRUE;
         this.createdTime = LocalDateTime.now();
         this.lastModifiedTime = LocalDateTime.now();
     }

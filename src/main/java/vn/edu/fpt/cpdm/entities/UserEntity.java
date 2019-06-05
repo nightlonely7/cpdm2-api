@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Entity(name = "User")
+@Entity(name = "UserEntity")
 @Table(name = "user")
 @Data
 public class UserEntity implements UserDetails {

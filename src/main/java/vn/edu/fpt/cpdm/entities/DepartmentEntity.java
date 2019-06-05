@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "Department")
+@Entity(name = "DepartmentEntity")
 @Table(name = "department")
 @Data
 public class DepartmentEntity {

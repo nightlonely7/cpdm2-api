@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "DocumentFile")
+@Entity(name = "DocumentFileEntity")
 @Table(name = "document_file")
 @Data
 public class DocumentFileEntity {

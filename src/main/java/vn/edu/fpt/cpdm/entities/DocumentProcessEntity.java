@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity(name = "DocumentProcess")
+@Entity(name = "DocumentProcessEntity")
 @Table(name = "document_process")
 @Data
 public class DocumentProcessEntity {

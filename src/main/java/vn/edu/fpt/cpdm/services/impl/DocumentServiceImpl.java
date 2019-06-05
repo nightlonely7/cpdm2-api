@@ -10,6 +10,7 @@ import vn.edu.fpt.cpdm.exceptions.BadRequestException;
 import vn.edu.fpt.cpdm.exceptions.ConflictException;
 import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
+import vn.edu.fpt.cpdm.forms.documents.DocumentSearchForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
 import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
 import vn.edu.fpt.cpdm.models.documents.DocumentSummary;
@@ -45,8 +46,8 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Page<DocumentSummary> findAllSummary(Pageable pageable) {
-        return documentRepository.findAllSummaryBy(pageable);
+    public Page<DocumentSummary> findAllSummary(DocumentSearchForm documentSearchForm, Pageable pageable) {
+        return documentRepository.findAllSummary(documentSearchForm, pageable);
     }
 
     @Override
@@ -158,10 +159,10 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Page<DocumentSummary> findAllExecutingDocuments(Pageable pageable) {
+    public Page<DocumentSummary> findAllExecutingDocuments(DocumentSearchForm documentSearchForm, Pageable pageable) {
 
         UserEntity executor = authenticationService.getCurrentLoggedUser();
-        Page<DocumentSummary> documentSummaries = documentRepository.findAllByCurrentStep_Executor(executor, pageable);
+        Page<DocumentSummary> documentSummaries = documentRepository.findAllByCurrentStep_Executor(documentSearchForm, executor, pageable);
 
         return documentSummaries;
     }

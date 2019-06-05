@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity(name = "ProcessStep")
+@Entity(name = "ProcessStepEntity")
 @Table(name = "process_step")
 @Data
 public class ProcessStepEntity {

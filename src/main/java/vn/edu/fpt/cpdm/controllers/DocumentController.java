@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.cpdm.exceptions.ModelNotValidException;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
+import vn.edu.fpt.cpdm.forms.documents.DocumentSearchForm;
 import vn.edu.fpt.cpdm.forms.documents.files.DocumentFileCreateForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
 import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
@@ -36,11 +37,18 @@ public class DocumentController {
     }
 
     @GetMapping("/search/executing")
-    public ResponseEntity<Page<DocumentSummary>> findAllExecutingDocuments(@PageableDefault Pageable pageable) {
+    public ResponseEntity<Page<DocumentSummary>> findAllExecutingDocuments(DocumentSearchForm documentSearchForm,
+                                                                           @PageableDefault Pageable pageable) {
 
-        Page<DocumentSummary> documentSummaries = documentService.findAllExecutingDocuments(pageable);
+        Page<DocumentSummary> documentSummaries = documentService.findAllExecutingDocuments(documentSearchForm, pageable);
 
         return ResponseEntity.ok(documentSummaries);
+    }
+
+    @GetMapping("/search/creates")
+    public ResponseEntity<Page<DocumentSummary>> findAllCreatedDocuments(DocumentSearchForm documentSearchForm,
+                                                                         @PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(documentService.findAllSummary(documentSearchForm, pageable));
     }
 
     @GetMapping("/{id}")
@@ -53,10 +61,6 @@ public class DocumentController {
         return ResponseEntity.ok(documentFileService.findAllDetailByDocumentId(documentId));
     }
 
-    @GetMapping("/search/creates")
-    public ResponseEntity<Page<DocumentSummary>> findAllCreatedDocuments(@PageableDefault Pageable pageable) {
-        return ResponseEntity.ok(documentService.findAllSummary(pageable));
-    }
 
     @PostMapping
     public ResponseEntity<DocumentDetail> createDocument(@Valid @RequestBody DocumentCreateForm documentCreateForm,

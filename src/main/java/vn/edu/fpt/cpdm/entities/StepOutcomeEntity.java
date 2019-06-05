@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity(name = "StepOutcome")
+@Entity(name = "StepOutcomeEntity")
 @Table(name = "step_outcome")
 @Data
 public class StepOutcomeEntity {
