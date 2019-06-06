@@ -31,6 +31,6 @@ public class StepFeedbackServiceImpl implements StepFeedbackService {
                 () -> new EntityIdNotFoundException(documentId, "Document")
         );
 
-        return stepFeedbackRepository.findAllByDocumentOrOrderByArrivalTime(documentEntity);
+        return stepFeedbackRepository.findAllByDocumentOrderByArrivalTime(documentEntity);
     }
 }

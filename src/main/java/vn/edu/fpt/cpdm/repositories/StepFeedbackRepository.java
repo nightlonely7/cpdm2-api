@@ -8,5 +8,5 @@ import vn.edu.fpt.cpdm.models.processes.StepFeedbackSummary;
 import java.util.List;
 
 public interface StepFeedbackRepository extends JpaRepository<StepFeedbackEntity, Integer> {
-    List<StepFeedbackSummary> findAllByDocumentOrOrderByArrivalTime(DocumentEntity documentEntity);
+    List<StepFeedbackSummary> findAllByDocumentOrderByArrivalTime(DocumentEntity documentEntity);
 }
