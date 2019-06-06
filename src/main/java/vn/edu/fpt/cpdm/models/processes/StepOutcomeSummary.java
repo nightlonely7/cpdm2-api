@@ -5,4 +5,5 @@ public interface StepOutcomeSummary {
     String getDescription();
     String getName();
     Boolean getMain();
+    ProcessStepSummary getStep();
 }

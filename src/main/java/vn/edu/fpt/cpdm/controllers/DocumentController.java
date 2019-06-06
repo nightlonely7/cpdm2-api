@@ -15,8 +15,10 @@ import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
 import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
 import vn.edu.fpt.cpdm.models.documents.DocumentSummary;
 import vn.edu.fpt.cpdm.models.documents.files.DocumentFileDetail;
+import vn.edu.fpt.cpdm.models.processes.StepFeedbackSummary;
 import vn.edu.fpt.cpdm.services.DocumentFileService;
 import vn.edu.fpt.cpdm.services.DocumentService;
+import vn.edu.fpt.cpdm.services.StepFeedbackService;
 import vn.edu.fpt.cpdm.utils.ModelErrorMessage;
 
 import javax.validation.Valid;
@@ -28,12 +30,15 @@ public class DocumentController {
 
     private final DocumentService documentService;
     private final DocumentFileService documentFileService;
+    private final StepFeedbackService stepFeedbackService;
 
     @Autowired
     public DocumentController(DocumentService documentService,
-                              DocumentFileService documentFileService) {
+                              DocumentFileService documentFileService,
+                              StepFeedbackService stepFeedbackService) {
         this.documentService = documentService;
         this.documentFileService = documentFileService;
+        this.stepFeedbackService = stepFeedbackService;
     }
 
     @GetMapping("/search/executing")
@@ -61,6 +66,10 @@ public class DocumentController {
         return ResponseEntity.ok(documentFileService.findAllDetailByDocumentId(documentId));
     }
 
+    @GetMapping("/{id}/feedback")
+    public ResponseEntity<List<StepFeedbackSummary>> findFeedback(@PathVariable("id") Integer documentId) {
+        return ResponseEntity.ok(stepFeedbackService.findAllByDocumentId(documentId));
+    }
 
     @PostMapping
     public ResponseEntity<DocumentDetail> createDocument(@Valid @RequestBody DocumentCreateForm documentCreateForm,
