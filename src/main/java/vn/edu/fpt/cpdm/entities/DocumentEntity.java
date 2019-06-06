@@ -94,7 +94,8 @@ public class DocumentEntity {
         this.startedProcessing = Boolean.FALSE;
         this.processed = Boolean.FALSE;
         this.available = Boolean.TRUE;
-        this.createdTime = LocalDateTime.now();
-        this.lastModifiedTime = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        this.createdTime = now;
+        this.lastModifiedTime = now;
     }
 }

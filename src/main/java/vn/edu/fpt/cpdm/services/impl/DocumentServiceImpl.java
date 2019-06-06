@@ -11,6 +11,7 @@ import vn.edu.fpt.cpdm.exceptions.ConflictException;
 import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
 import vn.edu.fpt.cpdm.forms.documents.DocumentSearchForm;
+import vn.edu.fpt.cpdm.forms.documents.DocumentUpdateForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
 import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
 import vn.edu.fpt.cpdm.models.documents.DocumentSummary;
@@ -82,6 +83,44 @@ public class DocumentServiceImpl implements DocumentService {
         documentEntity.setOutsider(outsiderRepository.findById(documentCreateForm.getOutsiderId()).orElseThrow(
                 () -> new EntityIdNotFoundException(documentCreateForm.getOutsiderId(), "Outsider")
         ));
+        DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
+        DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
+                () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")
+        );
+
+        return savedDocumentDetail;
+    }
+
+    @Override
+    public DocumentDetail update(Integer id, DocumentUpdateForm documentUpdateForm) {
+
+        DocumentEntity documentEntity = documentRepository.findById(id).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "Document")
+        );
+
+        if (documentEntity.getCode().equals(documentUpdateForm.getCode()) == false
+                && documentRepository.existsByCode(documentUpdateForm.getCode())) {
+            throw new ConflictException("This document code '" + documentUpdateForm.getCode() + "' " +
+                    "is already existed!");
+        }
+
+        if (documentUpdateForm.getEffectiveDate().isAfter(documentUpdateForm.getEffectiveEndDate())) {
+            throw new BadRequestException("EffectiveDate as '" + documentUpdateForm.getEffectiveDate().toString() + "' " +
+                    "can not after effectiveEndDate as '" + documentUpdateForm.getEffectiveEndDate() + "'");
+        }
+
+        documentEntity.setCode(documentUpdateForm.getCode());
+        documentEntity.setTitle(documentUpdateForm.getTitle());
+        documentEntity.setSummary(documentUpdateForm.getSummary());
+        documentEntity.setDecree(documentUpdateForm.getDecree());
+        documentEntity.setDetail(documentUpdateForm.getDetail());
+        documentEntity.setArrivalDate(documentUpdateForm.getArrivalDate());
+        documentEntity.setEffectiveDate(documentUpdateForm.getEffectiveDate());
+        documentEntity.setEffectiveEndDate(documentUpdateForm.getEffectiveEndDate());
+        documentEntity.setOutsider(outsiderRepository.findById(documentUpdateForm.getOutsiderId()).orElseThrow(
+                () -> new EntityIdNotFoundException(documentUpdateForm.getOutsiderId(), "Outsider")
+        ));
+        documentEntity.setLastModifiedTime(LocalDateTime.now());
         DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
         DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
                 () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")

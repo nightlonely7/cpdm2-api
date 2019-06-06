@@ -90,10 +90,6 @@ public class DocumentProcessServiceImpl implements DocumentProcessService {
             }
         }
 
-        DocumentProcessEntity savedDocumentProcessEntity2 = documentProcessRepository.findById(savedDocumentProcessEntity.getId())
-                .orElseThrow(() -> new EntityIdNotFoundException(savedDocumentProcessEntity.getId(), "DocumentProcess"));
-        System.out.println(savedDocumentProcessEntity2.getSteps());
-
         DocumentProcessDetail savedDocumentProcessDetail = documentProcessRepository.findDetailById(
                 savedDocumentProcessEntity.getId()).orElseThrow(
                 () -> new EntityIdNotFoundException(savedDocumentProcessEntity.getId(), "DocumentProcess")

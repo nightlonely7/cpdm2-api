@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.cpdm.exceptions.ModelNotValidException;
 import vn.edu.fpt.cpdm.forms.documents.DocumentCreateForm;
 import vn.edu.fpt.cpdm.forms.documents.DocumentSearchForm;
+import vn.edu.fpt.cpdm.forms.documents.DocumentUpdateForm;
 import vn.edu.fpt.cpdm.forms.documents.files.DocumentFileCreateForm;
 import vn.edu.fpt.cpdm.forms.process.FeedbackCreateForm;
 import vn.edu.fpt.cpdm.models.documents.DocumentDetail;
@@ -72,8 +73,8 @@ public class DocumentController {
     }
 
     @PostMapping
-    public ResponseEntity<DocumentDetail> createDocument(@Valid @RequestBody DocumentCreateForm documentCreateForm,
-                                                         BindingResult result) {
+    public ResponseEntity<DocumentDetail> create(@Valid @RequestBody DocumentCreateForm documentCreateForm,
+                                                 BindingResult result) {
         if (result.hasErrors()) {
             String message = ModelErrorMessage.build(result);
             throw new ModelNotValidException(message);
@@ -93,6 +94,18 @@ public class DocumentController {
         }
 
         return ResponseEntity.ok(documentFileService.create(documentId, documentFileCreateForm));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DocumentDetail> update(@PathVariable("id") Integer id,
+                                                 @Valid @RequestBody DocumentUpdateForm documentUpdateForm,
+                                                 BindingResult result) {
+        if (result.hasErrors()) {
+            String message = ModelErrorMessage.build(result);
+            throw new ModelNotValidException(message);
+        }
+
+        return ResponseEntity.ok(documentService.update(id, documentUpdateForm));
     }
 
     @PatchMapping("/{id}/put_into_process")

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface OutsiderService {
 
-    List<OutsiderSummary> findAllSummaryByNameContainsOrCodeContains(String name, String code);
+    List<OutsiderSummary> findAllSummary();
 
     OutsiderDetail findDetailById(Integer id);
 

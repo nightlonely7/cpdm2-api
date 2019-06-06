@@ -25,8 +25,8 @@ public class OutsiderServiceImpl implements OutsiderService {
     }
 
     @Override
-    public List<OutsiderSummary> findAllSummaryByNameContainsOrCodeContains(String name, String code) {
-        return outsiderRepository.findAllSummaryByNameContainsOrCodeContainsAndAvailableTrue(name, code);
+    public List<OutsiderSummary> findAllSummary() {
+        return outsiderRepository.findAllSummaryByAvailableTrue();
     }
 
     @Override

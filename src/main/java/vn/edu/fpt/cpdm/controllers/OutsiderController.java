@@ -27,11 +27,9 @@ public class OutsiderController {
     }
 
 
-    @GetMapping("/search/findAllSummaryByNameContainsOrCodeContains")
-    public ResponseEntity<List<OutsiderSummary>> findAllSummaryByNameContainsOrCodeContains(
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "code", required = false) String code) {
-        return ResponseEntity.ok(outsiderService.findAllSummaryByNameContainsOrCodeContains(name, code));
+    @GetMapping
+    public ResponseEntity<List<OutsiderSummary>> findAllSummary() {
+        return ResponseEntity.ok(outsiderService.findAllSummary());
     }
 
     @GetMapping("/{id}")

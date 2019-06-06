@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
-public class DocumentCreateForm {
+public class DocumentUpdateForm {
 
     @NotBlank
     private String code;
