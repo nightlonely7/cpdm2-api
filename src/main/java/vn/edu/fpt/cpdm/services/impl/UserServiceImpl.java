@@ -1,6 +1,11 @@
 package vn.edu.fpt.cpdm.services.impl;
 
+import jdk.nashorn.internal.runtime.options.Option;
+import org.modelmapper.Conditions;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +18,9 @@ import vn.edu.fpt.cpdm.exceptions.EntityIdNotFoundException;
 import vn.edu.fpt.cpdm.exceptions.NotFoundException;
 import vn.edu.fpt.cpdm.forms.users.UserCreateForm;
 import vn.edu.fpt.cpdm.forms.users.UserUpdateForm;
+import vn.edu.fpt.cpdm.models.users.User;
 import vn.edu.fpt.cpdm.models.users.UserBasic;
+import vn.edu.fpt.cpdm.models.users.UserSummary;
 import vn.edu.fpt.cpdm.repositories.DepartmentRepository;
 import vn.edu.fpt.cpdm.repositories.RoleRepository;
 import vn.edu.fpt.cpdm.repositories.UserRepository;
@@ -21,6 +28,7 @@ import vn.edu.fpt.cpdm.services.AuthenticationService;
 import vn.edu.fpt.cpdm.services.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -59,6 +67,7 @@ public class UserServiceImpl implements UserService {
         }
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(userCreateForm.getUsername());
+        userEntity.setProcessRole(userCreateForm.getProcessRole());
 
         // encode password
         String encodedPassword = passwordEncoder.encode(userCreateForm.getPassword());
@@ -113,6 +122,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User active(Integer id) {
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "User")
+        );
+
+        userEntity.setAvailable(true);
+        UserEntity savedUserEntity = userRepository.save(userEntity);
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(savedUserEntity,User.class);
+    }
+
+    @Override
+    public User deActive(Integer id) {
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "User")
+        );
+
+        userEntity.setAvailable(false);
+        UserEntity savedUserEntity = userRepository.save(userEntity);
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(savedUserEntity,User.class);
+    }
+
+    @Override
     public UserBasic updatePassword() {
         return null;
     }
@@ -155,5 +188,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserBasic> findAllDirector() {
         return userRepository.findAllByRole_NameAndAvailableTrue("ROLE_ADMIN");
+    }
+
+    @Override
+    public Page<UserSummary> findAllUserForDirector(Pageable pageable) {
+        return userRepository.findAllByRole_NameNot("ROLE_ADMIN", pageable);
+    }
+
+    @Override
+    public Page<UserSummary> findAllStaffForManager(Pageable pageable) {
+        UserEntity manager = authenticationService.getCurrentLoggedUser();
+        return userRepository.findAllByRole_NameAndDepartment_Id("ROLE_STAFF",manager.getDepartment().getId(), pageable);
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(
+                () -> new EntityIdNotFoundException(username, "User")
+        );
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(userEntity, User.class);
     }
 }
