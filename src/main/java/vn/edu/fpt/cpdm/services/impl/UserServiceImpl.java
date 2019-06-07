@@ -51,6 +51,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserBasic create(UserCreateForm userCreateForm) {
+
+        UserEntity creator = authenticationService.getCurrentLoggedUser();
+
         if (userRepository.existsByUsername(userCreateForm.getUsername())) {
             throw new ConflictException("This username '" + userCreateForm.getUsername() + "' is already exists!");
         }
@@ -61,14 +64,11 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(userCreateForm.getPassword());
         userEntity.setPassword(encodedPassword);
 
-        DepartmentEntity departmentEntity = departmentRepository.findById(userCreateForm.getDepartmentId()).orElseThrow(
-                () -> new EntityIdNotFoundException(userCreateForm.getDepartmentId(), "Department")
-        );
+        userEntity.setDepartment(creator.getDepartment());
 
-        userEntity.setDepartment(departmentEntity);
-
-        RoleEntity role = roleRepository.findByName("ROLE_STAFF").orElseThrow(
-                () -> new EntityIdNotFoundException("ROLE_STAFF", "Role")
+        final String ROLE_STAFF = "ROLE_STAFF";
+        RoleEntity role = roleRepository.findByName(ROLE_STAFF).orElseThrow(
+                () -> new EntityIdNotFoundException(ROLE_STAFF, "Role")
         );
 
         userEntity.setRole(role);

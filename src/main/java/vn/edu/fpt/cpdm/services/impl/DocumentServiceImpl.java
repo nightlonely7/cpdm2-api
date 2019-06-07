@@ -52,6 +52,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public Page<DocumentSummary> findAllRelatedSummary(DocumentSearchForm documentSearchForm, Pageable pageable) {
+        UserEntity current = authenticationService.getCurrentLoggedUser();
+        return documentRepository.findAllRelatedSummary(documentSearchForm, current, pageable);
+    }
+
+    @Override
     public DocumentDetail findDetailById(Integer id) {
         return documentRepository.findDetailById(id).orElseThrow(
                 () -> new EntityIdNotFoundException(id, "Document")

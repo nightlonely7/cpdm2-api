@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "DocumentEntity")
 @Table(name = "document")
@@ -84,6 +85,16 @@ public class DocumentEntity {
     @Basic
     @Column(name = "last_modified_time", nullable = false)
     private LocalDateTime lastModifiedTime;
+
+    @Basic
+    @Column(name = "internal", nullable = false)
+    private Boolean internal;
+
+    @ManyToMany
+    @JoinTable(name = "documents_relatives",
+            joinColumns = @JoinColumn(name = "document_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private List<UserEntity> relatives;
 
     @Basic
     @Column(name = "available", nullable = false)

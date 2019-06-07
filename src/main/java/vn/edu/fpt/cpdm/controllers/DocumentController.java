@@ -45,7 +45,6 @@ public class DocumentController {
     @GetMapping("/search/executing")
     public ResponseEntity<Page<DocumentSummary>> findAllExecutingDocuments(DocumentSearchForm documentSearchForm,
                                                                            @PageableDefault Pageable pageable) {
-
         Page<DocumentSummary> documentSummaries = documentService.findAllExecutingDocuments(documentSearchForm, pageable);
 
         return ResponseEntity.ok(documentSummaries);
@@ -55,6 +54,12 @@ public class DocumentController {
     public ResponseEntity<Page<DocumentSummary>> findAllCreatedDocuments(DocumentSearchForm documentSearchForm,
                                                                          @PageableDefault Pageable pageable) {
         return ResponseEntity.ok(documentService.findAllSummary(documentSearchForm, pageable));
+    }
+
+    @GetMapping("/search/related")
+    public ResponseEntity<Page<DocumentSummary>> findAllRelatedDocuments(DocumentSearchForm documentSearchForm,
+                                                                         @PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(documentService.findAllRelatedSummary(documentSearchForm, pageable));
     }
 
     @GetMapping("/{id}")

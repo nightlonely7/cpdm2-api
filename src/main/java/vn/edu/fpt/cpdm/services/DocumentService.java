@@ -13,6 +13,8 @@ public interface DocumentService {
 
     Page<DocumentSummary> findAllSummary(DocumentSearchForm documentSearchForm, Pageable pageable);
 
+    Page<DocumentSummary> findAllRelatedSummary(DocumentSearchForm documentSearchForm, Pageable pageable);
+
     DocumentDetail findDetailById(Integer id);
 
     DocumentDetail create(DocumentCreateForm documentCreateForm);

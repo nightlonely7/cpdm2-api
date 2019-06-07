@@ -26,7 +26,6 @@ public class OutsiderController {
         this.outsiderService = outsiderService;
     }
 
-
     @GetMapping
     public ResponseEntity<List<OutsiderSummary>> findAllSummary() {
         return ResponseEntity.ok(outsiderService.findAllSummary());
