@@ -154,6 +154,20 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public DocumentDetail closeProcess(Integer id) {
+        DocumentEntity documentEntity = documentRepository.findById(id).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "Document")
+        );
+        documentEntity.setProcessed(Boolean.TRUE);
+        documentEntity.setStartedProcessing(Boolean.FALSE);
+        DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
+        DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
+                () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")
+        );
+        return savedDocumentDetail;
+    }
+
+    @Override
     public void forwardProcess(Integer documentId, Integer outcomeId, FeedbackCreateForm feedbackCreateForm) {
 
         DocumentEntity documentEntity = documentRepository

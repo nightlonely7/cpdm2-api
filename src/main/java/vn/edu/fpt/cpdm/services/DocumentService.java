@@ -21,6 +21,8 @@ public interface DocumentService {
 
     DocumentDetail putIntoProcess(Integer documentId, Integer processId);
 
+    DocumentDetail closeProcess(Integer id);
+
     void forwardProcess(Integer documentId, Integer outcomeId, FeedbackCreateForm feedbackCreateForm);
 
     Page<DocumentSummary> findAllExecutingDocuments(DocumentSearchForm documentSearchForm, Pageable pageable);

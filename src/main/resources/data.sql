@@ -1,4 +1,4 @@
-INSERT INTO role (name) VALUES ('ROLE_ADMIN'), ('ROLE_MANAGER'), ('ROLE_DOCUMENT_WRITER'), ('ROLE_STAFF');
+INSERT INTO role (name) VALUES ('ROLE_ADMIN'), ('ROLE_MANAGER'), ('ROLE_ARCHIVIST'), ('ROLE_STAFF');
 
 INSERT INTO department (code, name, created_time, available) VALUES
 ('Hanhchinh', 'Phòng hành chính', '2017-09-20 07:22:12', true),
