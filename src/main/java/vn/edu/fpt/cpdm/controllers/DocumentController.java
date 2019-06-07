@@ -116,6 +116,12 @@ public class DocumentController {
         return ResponseEntity.ok(documentService.putIntoProcess(documentId, processId));
     }
 
+    @PatchMapping("/{id}/close_process")
+    public ResponseEntity<DocumentDetail> closeDocumentProcess(@PathVariable("id") Integer id) {
+
+        return ResponseEntity.ok(documentService.closeProcess(id));
+    }
+
     @PatchMapping("/{id}/forward_process")
     public ResponseEntity forwardProcessDocument(@PathVariable("id") Integer documentId,
                                                  @RequestParam("outcomeId") Integer outcomeId,

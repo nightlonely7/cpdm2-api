@@ -15,7 +15,6 @@ import java.util.Optional;
 
 public interface DocumentRepository extends JpaRepository<DocumentEntity, Integer> {
 
-
     @Query("select document from DocumentEntity document where " +
             "(:#{#documentSearchForm.code} is null or document.code like %:#{#documentSearchForm.code}%) and " +
             "(:#{#documentSearchForm.title} is null or document.title like %:#{#documentSearchForm.title}%) and " +
