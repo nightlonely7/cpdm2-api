@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     Optional<UserEntity> findByUsername(String username);
     Optional<UserBasic> findBasicByUsername(String username);
-    List<UserBasic> findAllBy();
+    List<UserSummary> findAllBy();
 
     boolean existsByUsername(String username);
 
@@ -28,4 +28,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     List<UserBasic> findAllByRole_NameAndAvailableTrue(String roleName);
     Page<UserSummary> findAllByRole_NameNot(String roleName, Pageable pageable);
     Page<UserSummary> findAllByRole_NameAndDepartment_Id(String roleName, Integer departmentId, Pageable pageable);
+    List<UserSummary> findAllByDepartment_IdAndAvailableTrue(Integer departmentId);
 }

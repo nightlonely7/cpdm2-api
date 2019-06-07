@@ -7,10 +7,12 @@ import vn.edu.fpt.cpdm.forms.departments.DepartmentCreateForm;
 import vn.edu.fpt.cpdm.forms.departments.DepartmentUpdateForm;
 import vn.edu.fpt.cpdm.models.departments.DepartmentSummary;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DepartmentService {
     Page<DepartmentSummary> findAllSummary(Pageable pageable);
+    List<DepartmentSummary> findAllSummary();
     DepartmentSummary findSummaryById(Integer id);
     DepartmentSummary create(DepartmentCreateForm departmentCreateForm);
     DepartmentSummary update(Integer id, DepartmentUpdateForm departmentUpdateForm);

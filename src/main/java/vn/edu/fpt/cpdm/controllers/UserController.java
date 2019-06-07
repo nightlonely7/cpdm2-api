@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/search/executor")
-    public ResponseEntity<List<UserBasic>> findAllExecutor(){
+    public ResponseEntity<List<UserSummary>> findAllExecutor(){
         return ResponseEntity.ok(userService.findAllExecutor());
     }
     @GetMapping("/search/{id}")
@@ -89,5 +89,16 @@ public class UserController {
     @GetMapping("/search/findAllStaffForManager")
     public ResponseEntity<Page<UserSummary>> findAllStaffForManager(@PageableDefault Pageable pageable){
         return ResponseEntity.ok(userService.findAllStaffForManager(pageable));
+    }
+
+    @GetMapping("/search/findAllByDepartmentId/{departmentId}")
+    public ResponseEntity<List<UserSummary>> findByDepartment(@PathVariable("departmentId") Integer departmentId){
+        return ResponseEntity.ok(userService.findAllSummaryByDepartment(departmentId));
+    }
+
+    @PutMapping("/promo/{id}/{departmentId}")
+    public ResponseEntity<UserBasic> update(@PathVariable("id") Integer id,
+                                              @PathVariable("departmentId") Integer departmentId) {
+        return ResponseEntity.ok(userService.promo(id,departmentId));
     }
 }

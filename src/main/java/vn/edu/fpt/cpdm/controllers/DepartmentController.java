@@ -12,11 +12,13 @@ import vn.edu.fpt.cpdm.exceptions.ModelNotValidException;
 import vn.edu.fpt.cpdm.forms.departments.DepartmentCreateForm;
 import vn.edu.fpt.cpdm.forms.departments.DepartmentUpdateForm;
 import vn.edu.fpt.cpdm.models.departments.DepartmentSummary;
+import vn.edu.fpt.cpdm.models.users.UserBasic;
 import vn.edu.fpt.cpdm.services.DepartmentService;
 import vn.edu.fpt.cpdm.utils.ModelErrorMessage;
 
 import javax.validation.Valid;
 import javax.xml.ws.Response;
+import java.util.List;
 
 @RestController
 @RequestMapping("/departments")
@@ -31,6 +33,11 @@ public class DepartmentController {
     @GetMapping
     public ResponseEntity<Page<DepartmentSummary>> findAllSummary(@PageableDefault Pageable pageable){
         return ResponseEntity.ok(departmentService.findAllSummary(pageable));
+    }
+
+    @GetMapping("/search/all")
+    public ResponseEntity<List<DepartmentSummary>> findAllSummary(){
+        return ResponseEntity.ok(departmentService.findAllSummary());
     }
 
     @GetMapping("/{id}")

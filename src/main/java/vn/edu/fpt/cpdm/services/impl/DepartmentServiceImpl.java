@@ -15,6 +15,8 @@ import vn.edu.fpt.cpdm.repositories.DepartmentRepository;
 import vn.edu.fpt.cpdm.services.DepartmentService;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
+
 @Service
 public class DepartmentServiceImpl implements DepartmentService{
 
@@ -28,6 +30,11 @@ public class DepartmentServiceImpl implements DepartmentService{
     @Override
     public Page<DepartmentSummary> findAllSummary(Pageable pageable) {
         return departmentRepository.findAllBy(pageable);
+    }
+
+    @Override
+    public List<DepartmentSummary> findAllSummary() {
+        return departmentRepository.findAllBy();
     }
 
     @Override

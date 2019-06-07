@@ -146,6 +146,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserSummary> findAllSummaryByDepartment(Integer departmentId) {
+        return userRepository.findAllByDepartment_IdAndAvailableTrue(departmentId);
+    }
+
+    @Override
+    public UserBasic promo(Integer id, Integer departmentId) {
+        UserBasic manager = this.findManagerByDepartmentId(departmentId);
+        UserEntity managerEntity = userRepository.findById(manager.getId()).get();
+        managerEntity.setRole(roleRepository.findByName("ROLE_STAFF").get());
+        userRepository.save(managerEntity);
+        UserEntity newManagerEntity = userRepository.findById(id).get();
+        newManagerEntity.setRole(roleRepository.findByName("ROLE_MANAGER").get());
+        UserEntity savedNewManagerEntity = userRepository.save(newManagerEntity);
+        return userRepository.findBasicByUsername(savedNewManagerEntity.getUsername()).get();
+    }
+
+    @Override
     public UserBasic updatePassword() {
         return null;
     }
@@ -165,7 +182,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserBasic> findAllExecutor() {
+    public List<UserSummary> findAllExecutor() {
         return userRepository.findAllBy();
     }
 

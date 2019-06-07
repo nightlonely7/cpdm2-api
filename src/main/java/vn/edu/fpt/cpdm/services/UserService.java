@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import vn.edu.fpt.cpdm.entities.UserEntity;
 import vn.edu.fpt.cpdm.forms.users.UserCreateForm;
 import vn.edu.fpt.cpdm.forms.users.UserUpdateForm;
 import vn.edu.fpt.cpdm.models.users.User;
@@ -26,7 +25,7 @@ public interface UserService extends UserDetailsService {
 
     UserBasic findBasicById(Integer id);
 
-    List<UserBasic> findAllExecutor();
+    List<UserSummary> findAllExecutor();
 
     UserBasic findManagerByDepartmentId(Integer departmentId);
 
@@ -41,4 +40,8 @@ public interface UserService extends UserDetailsService {
     User active(Integer id);
 
     User deActive(Integer id);
+
+    List<UserSummary> findAllSummaryByDepartment(Integer departmentId);
+
+    UserBasic promo(Integer id, Integer departmentId);
 }
