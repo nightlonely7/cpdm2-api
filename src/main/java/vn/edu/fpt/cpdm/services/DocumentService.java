@@ -23,6 +23,12 @@ public interface DocumentService {
 
     DocumentDetail closeProcess(Integer id);
 
+    DocumentDetail sendToApprove(Integer id);
+
+    DocumentDetail approve(Integer id);
+
+    DocumentDetail reject(Integer id);
+
     void forwardProcess(Integer documentId, Integer outcomeId, FeedbackCreateForm feedbackCreateForm);
 
     Page<DocumentSummary> findAllExecutingDocuments(DocumentSearchForm documentSearchForm, Pageable pageable);

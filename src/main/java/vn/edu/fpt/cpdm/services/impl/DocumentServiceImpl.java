@@ -30,6 +30,7 @@ public class DocumentServiceImpl implements DocumentService {
     private final StepOutcomeRepository stepOutcomeRepository;
     private final StepFeedbackRepository stepFeedbackRepository;
     private final OutsiderRepository outsiderRepository;
+    private final DocumentTypeRepository documentTypeRepository;
 
     @Autowired
     public DocumentServiceImpl(DocumentRepository documentRepository,
@@ -37,13 +38,15 @@ public class DocumentServiceImpl implements DocumentService {
                                AuthenticationService authenticationService,
                                StepOutcomeRepository stepOutcomeRepository,
                                StepFeedbackRepository stepFeedbackRepository,
-                               OutsiderRepository outsiderRepository) {
+                               OutsiderRepository outsiderRepository,
+                               DocumentTypeRepository documentTypeRepository) {
         this.documentRepository = documentRepository;
         this.documentProcessRepository = documentProcessRepository;
         this.authenticationService = authenticationService;
         this.stepOutcomeRepository = stepOutcomeRepository;
         this.stepFeedbackRepository = stepFeedbackRepository;
         this.outsiderRepository = outsiderRepository;
+        this.documentTypeRepository = documentTypeRepository;
     }
 
     @Override
@@ -76,6 +79,9 @@ public class DocumentServiceImpl implements DocumentService {
 
         DocumentEntity documentEntity = new DocumentEntity();
         documentEntity.setCode(documentCreateForm.getCode());
+        documentEntity.setType(documentTypeRepository.findById(documentCreateForm.getTypeId()).orElseThrow(
+                () -> new EntityIdNotFoundException(documentCreateForm.getTypeId(), "Type")
+        ));
         documentEntity.setTitle(documentCreateForm.getTitle());
         documentEntity.setSummary(documentCreateForm.getSummary());
         documentEntity.setDecree(documentCreateForm.getDecree());
@@ -87,6 +93,9 @@ public class DocumentServiceImpl implements DocumentService {
                 () -> new EntityIdNotFoundException(documentCreateForm.getOutsiderId(), "Outsider")
         ));
         documentEntity.setInternal(documentCreateForm.getInternal());
+        documentEntity.setSent(Boolean.FALSE);
+        documentEntity.setApproved(Boolean.FALSE);
+        documentEntity.setRejected(Boolean.FALSE);
         DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
         DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
                 () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")
@@ -108,12 +117,17 @@ public class DocumentServiceImpl implements DocumentService {
                     "is already existed!");
         }
 
-        if (documentUpdateForm.getEffectiveDate().isAfter(documentUpdateForm.getEffectiveEndDate())) {
+        if (documentUpdateForm.getEffectiveDate() != null
+                && documentUpdateForm.getEffectiveEndDate() != null
+                && documentUpdateForm.getEffectiveDate().isAfter(documentUpdateForm.getEffectiveEndDate())) {
             throw new BadRequestException("EffectiveDate as '" + documentUpdateForm.getEffectiveDate().toString() + "' " +
                     "can not after effectiveEndDate as '" + documentUpdateForm.getEffectiveEndDate() + "'");
         }
 
         documentEntity.setCode(documentUpdateForm.getCode());
+        documentEntity.setType(documentTypeRepository.findById(documentUpdateForm.getTypeId()).orElseThrow(
+                () -> new EntityIdNotFoundException(documentUpdateForm.getTypeId(), "Type")
+        ));
         documentEntity.setTitle(documentUpdateForm.getTitle());
         documentEntity.setSummary(documentUpdateForm.getSummary());
         documentEntity.setDecree(documentUpdateForm.getDecree());
@@ -160,6 +174,48 @@ public class DocumentServiceImpl implements DocumentService {
         );
         documentEntity.setProcessed(Boolean.TRUE);
         documentEntity.setStartedProcessing(Boolean.FALSE);
+        DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
+        DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
+                () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")
+        );
+        return savedDocumentDetail;
+    }
+
+    @Override
+    public DocumentDetail sendToApprove(Integer id) {
+        DocumentEntity documentEntity = documentRepository.findById(id).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "Document")
+        );
+        documentEntity.setSent(Boolean.TRUE);
+        documentEntity.setApproved(Boolean.FALSE);
+        documentEntity.setRejected(Boolean.FALSE);
+        DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
+        DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
+                () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")
+        );
+        return savedDocumentDetail;
+    }
+
+    @Override
+    public DocumentDetail approve(Integer id) {
+        DocumentEntity documentEntity = documentRepository.findById(id).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "Document")
+        );
+        documentEntity.setApproved(Boolean.TRUE);
+        DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
+        DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
+                () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")
+        );
+        return savedDocumentDetail;
+    }
+
+    @Override
+    public DocumentDetail reject(Integer id) {
+        DocumentEntity documentEntity = documentRepository.findById(id).orElseThrow(
+                () -> new EntityIdNotFoundException(id, "Document")
+        );
+        documentEntity.setRejected(Boolean.TRUE);
+        documentEntity.setSent(Boolean.FALSE);
         DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
         DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
                 () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")

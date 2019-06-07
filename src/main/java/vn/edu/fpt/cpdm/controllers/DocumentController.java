@@ -134,4 +134,22 @@ public class DocumentController {
         documentService.forwardProcess(documentId, outcomeId, feedbackCreateForm);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{id}/send_to_approve")
+    public ResponseEntity<DocumentDetail> sendToApprove(@PathVariable("id") Integer id) {
+
+        return ResponseEntity.ok(documentService.sendToApprove(id));
+    }
+
+    @PatchMapping("/{id}/approve")
+    public ResponseEntity<DocumentDetail> approve(@PathVariable("id") Integer id) {
+
+        return ResponseEntity.ok(documentService.approve(id));
+    }
+
+    @PatchMapping("/{id}/reject")
+    public ResponseEntity<DocumentDetail> reject(@PathVariable("id") Integer id) {
+
+        return ResponseEntity.ok(documentService.reject(id));
+    }
 }

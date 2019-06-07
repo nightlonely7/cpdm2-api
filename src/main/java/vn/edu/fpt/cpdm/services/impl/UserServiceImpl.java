@@ -1,7 +1,5 @@
 package vn.edu.fpt.cpdm.services.impl;
 
-import jdk.nashorn.internal.runtime.options.Option;
-import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,7 +26,6 @@ import vn.edu.fpt.cpdm.services.AuthenticationService;
 import vn.edu.fpt.cpdm.services.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {

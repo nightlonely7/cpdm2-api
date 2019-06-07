@@ -16,6 +16,7 @@ public class DocumentSearchForm {
     private String outsiderCode;
     private String outsiderName;
     private String outsiderContactData;
+    private Integer typeId;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdTimeFrom;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -38,4 +39,7 @@ public class DocumentSearchForm {
     private LocalDate effectiveEndDateTo;
     private Boolean processed;
     private Boolean startedProcessing;
+    private Boolean sent;
+    private Boolean approved;
+    private Boolean rejected;
 }

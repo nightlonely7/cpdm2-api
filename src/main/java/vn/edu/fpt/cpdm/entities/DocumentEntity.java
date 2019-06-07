@@ -22,6 +22,10 @@ public class DocumentEntity {
     private String code;
 
     @ManyToOne
+    @JoinColumn(name = "type_id", referencedColumnName = "id")
+    private DocumentTypeEntity type;
+
+    @ManyToOne
     @JoinColumn(name = "outsider_id", referencedColumnName = "id", nullable = false)
     private OutsiderEntity outsider;
 
@@ -67,7 +71,7 @@ public class DocumentEntity {
     private Boolean processed;
 
     @Basic
-    @Column(name = "arrival_date", nullable = false)
+    @Column(name = "arrival_date")
     private LocalDate arrivalDate;
 
     @Basic
@@ -85,6 +89,18 @@ public class DocumentEntity {
     @Basic
     @Column(name = "last_modified_time", nullable = false)
     private LocalDateTime lastModifiedTime;
+
+    @Basic
+    @Column(name = "approved", nullable = false)
+    private Boolean approved;
+
+    @Basic
+    @Column(name = "rejected", nullable = false)
+    private Boolean rejected;
+
+    @Basic
+    @Column(name = "sent", nullable = false)
+    private Boolean sent;
 
     @Basic
     @Column(name = "internal", nullable = false)

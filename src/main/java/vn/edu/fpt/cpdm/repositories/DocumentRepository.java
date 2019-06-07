@@ -17,6 +17,7 @@ public interface DocumentRepository extends JpaRepository<DocumentEntity, Intege
 
     @Query("select document from DocumentEntity document where " +
             "(:#{#documentSearchForm.code} is null or document.code like %:#{#documentSearchForm.code}%) and " +
+            "(:#{#documentSearchForm.typeId} is null or document.type.id = :#{#documentSearchForm.typeId}) and " +
             "(:#{#documentSearchForm.title} is null or document.title like %:#{#documentSearchForm.title}%) and " +
             "(:#{#documentSearchForm.summary} is null or document.summary like %:#{#documentSearchForm.summary}%) and " +
             "(:#{#documentSearchForm.decree} is null or document.decree like %:#{#documentSearchForm.decree}%) and " +
@@ -36,6 +37,9 @@ public interface DocumentRepository extends JpaRepository<DocumentEntity, Intege
             "(:#{#documentSearchForm.effectiveEndDateTo} is null or document.effectiveEndDate <= :#{#documentSearchForm.effectiveEndDateTo}) and " +
             "(:#{#documentSearchForm.processed} is null or document.processed = :#{#documentSearchForm.processed}) and " +
             "(:#{#documentSearchForm.startedProcessing} is null or document.startedProcessing = :#{#documentSearchForm.startedProcessing}) and " +
+            "(:#{#documentSearchForm.sent} is null or document.sent = :#{#documentSearchForm.sent}) and " +
+            "(:#{#documentSearchForm.approved} is null or document.approved = :#{#documentSearchForm.approved}) and " +
+            "(:#{#documentSearchForm.rejected} is null or document.rejected = :#{#documentSearchForm.rejected}) and " +
             "(document.internal = false) and " + "(document.currentStep.executor = :executor) and " + "(document.available = true)")
     Page<DocumentSummary> findAllByCurrentStep_Executor(@Param("documentSearchForm") DocumentSearchForm documentSearchForm,
                                                         @Param("executor") UserEntity executor, Pageable pageable);
@@ -43,6 +47,7 @@ public interface DocumentRepository extends JpaRepository<DocumentEntity, Intege
 
     @Query("select document from DocumentEntity document where " +
             "(:#{#documentSearchForm.code} is null or document.code like %:#{#documentSearchForm.code}%) and " +
+            "(:#{#documentSearchForm.typeId} is null or document.type.id = :#{#documentSearchForm.typeId}) and " +
             "(:#{#documentSearchForm.title} is null or document.title like %:#{#documentSearchForm.title}%) and " +
             "(:#{#documentSearchForm.summary} is null or document.summary like %:#{#documentSearchForm.summary}%) and " +
             "(:#{#documentSearchForm.decree} is null or document.decree like %:#{#documentSearchForm.decree}%) and " +
@@ -62,6 +67,9 @@ public interface DocumentRepository extends JpaRepository<DocumentEntity, Intege
             "(:#{#documentSearchForm.effectiveEndDateTo} is null or document.effectiveEndDate <= :#{#documentSearchForm.effectiveEndDateTo}) and " +
             "(:#{#documentSearchForm.processed} is null or document.processed = :#{#documentSearchForm.processed}) and " +
             "(:#{#documentSearchForm.startedProcessing} is null or document.startedProcessing = :#{#documentSearchForm.startedProcessing}) and " +
+            "(:#{#documentSearchForm.sent} is null or document.sent = :#{#documentSearchForm.sent}) and " +
+            "(:#{#documentSearchForm.approved} is null or document.approved = :#{#documentSearchForm.approved}) and " +
+            "(:#{#documentSearchForm.rejected} is null or document.rejected = :#{#documentSearchForm.rejected}) and " +
             "(document.internal = :internal) and " + "(document.available = true)")
     Page<DocumentSummary> findAllSummary(@Param("documentSearchForm") DocumentSearchForm documentSearchForm,
                                          @Param("internal") boolean internal,

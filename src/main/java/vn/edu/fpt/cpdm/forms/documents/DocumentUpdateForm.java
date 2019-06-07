@@ -12,6 +12,8 @@ public class DocumentUpdateForm {
     @NotBlank
     private String code;
 
+    private Integer typeId;
+
     @NotNull
     private Integer outsiderId;
 
@@ -24,7 +26,6 @@ public class DocumentUpdateForm {
 
     private String detail;
 
-    @NotNull
     private LocalDate arrivalDate;
 
     private LocalDate effectiveDate;
