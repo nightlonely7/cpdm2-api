@@ -12,7 +12,7 @@ public interface DocumentDetail extends DocumentSummary {
     LocalDateTime getLastModifiedTime();
     ProcessStepSummary getCurrentStep();
     IdOnlyModel getProcess();
-
+    Boolean getInternal();
 }
 
 

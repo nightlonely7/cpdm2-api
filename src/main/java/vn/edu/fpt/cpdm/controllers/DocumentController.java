@@ -50,16 +50,12 @@ public class DocumentController {
         return ResponseEntity.ok(documentSummaries);
     }
 
-    @GetMapping("/search/creates")
-    public ResponseEntity<Page<DocumentSummary>> findAllCreatedDocuments(DocumentSearchForm documentSearchForm,
-                                                                         @PageableDefault Pageable pageable) {
-        return ResponseEntity.ok(documentService.findAllSummary(documentSearchForm, pageable));
-    }
-
-    @GetMapping("/search/related")
-    public ResponseEntity<Page<DocumentSummary>> findAllRelatedDocuments(DocumentSearchForm documentSearchForm,
-                                                                         @PageableDefault Pageable pageable) {
-        return ResponseEntity.ok(documentService.findAllRelatedSummary(documentSearchForm, pageable));
+    @GetMapping
+    public ResponseEntity<Page<DocumentSummary>> findAllCreatedDocuments(
+            DocumentSearchForm documentSearchForm,
+            @RequestParam(value = "internal", defaultValue = "false") boolean internal,
+            @PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(documentService.findAllSummary(documentSearchForm, internal, pageable));
     }
 
     @GetMapping("/{id}")

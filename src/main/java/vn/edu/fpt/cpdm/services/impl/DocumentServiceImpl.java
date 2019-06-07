@@ -47,15 +47,10 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Page<DocumentSummary> findAllSummary(DocumentSearchForm documentSearchForm, Pageable pageable) {
-        return documentRepository.findAllSummary(documentSearchForm, pageable);
+    public Page<DocumentSummary> findAllSummary(DocumentSearchForm documentSearchForm, boolean internal, Pageable pageable) {
+        return documentRepository.findAllSummary(documentSearchForm, internal, pageable);
     }
 
-    @Override
-    public Page<DocumentSummary> findAllRelatedSummary(DocumentSearchForm documentSearchForm, Pageable pageable) {
-        UserEntity current = authenticationService.getCurrentLoggedUser();
-        return documentRepository.findAllRelatedSummary(documentSearchForm, current, pageable);
-    }
 
     @Override
     public DocumentDetail findDetailById(Integer id) {
@@ -72,7 +67,9 @@ public class DocumentServiceImpl implements DocumentService {
                     "is already existed!");
         }
 
-        if (documentCreateForm.getEffectiveDate().isAfter(documentCreateForm.getEffectiveEndDate())) {
+        if (documentCreateForm.getEffectiveDate() != null
+                && documentCreateForm.getEffectiveEndDate() != null
+                && documentCreateForm.getEffectiveDate().isAfter(documentCreateForm.getEffectiveEndDate())) {
             throw new BadRequestException("EffectiveDate as '" + documentCreateForm.getEffectiveDate().toString() + "' " +
                     "can not after effectiveEndDate as '" + documentCreateForm.getEffectiveEndDate() + "'");
         }
@@ -89,6 +86,7 @@ public class DocumentServiceImpl implements DocumentService {
         documentEntity.setOutsider(outsiderRepository.findById(documentCreateForm.getOutsiderId()).orElseThrow(
                 () -> new EntityIdNotFoundException(documentCreateForm.getOutsiderId(), "Outsider")
         ));
+        documentEntity.setInternal(documentCreateForm.getInternal());
         DocumentEntity savedDocumentEntity = documentRepository.save(documentEntity);
         DocumentDetail savedDocumentDetail = documentRepository.findDetailById(savedDocumentEntity.getId()).orElseThrow(
                 () -> new EntityIdNotFoundException(savedDocumentEntity.getId(), "Document")

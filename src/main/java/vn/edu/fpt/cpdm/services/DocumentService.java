@@ -11,9 +11,7 @@ import vn.edu.fpt.cpdm.models.documents.DocumentSummary;
 
 public interface DocumentService {
 
-    Page<DocumentSummary> findAllSummary(DocumentSearchForm documentSearchForm, Pageable pageable);
-
-    Page<DocumentSummary> findAllRelatedSummary(DocumentSearchForm documentSearchForm, Pageable pageable);
+    Page<DocumentSummary> findAllSummary(DocumentSearchForm documentSearchForm, boolean internal, Pageable pageable);
 
     DocumentDetail findDetailById(Integer id);
 

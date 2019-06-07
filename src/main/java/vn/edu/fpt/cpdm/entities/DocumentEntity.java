@@ -90,12 +90,6 @@ public class DocumentEntity {
     @Column(name = "internal", nullable = false)
     private Boolean internal;
 
-    @ManyToMany
-    @JoinTable(name = "documents_relatives",
-            joinColumns = @JoinColumn(name = "document_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<UserEntity> relatives;
-
     @Basic
     @Column(name = "available", nullable = false)
     private Boolean available;

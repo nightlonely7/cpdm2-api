@@ -30,4 +30,7 @@ public class DocumentCreateForm {
     private LocalDate effectiveDate;
 
     private LocalDate effectiveEndDate;
+
+    @NotNull
+    private Boolean internal;
 }

@@ -19,10 +19,7 @@ INSERT INTO document (code, outsider_id, title, summary, detail, arrival_date, c
 ('code1', 1, 'title1', 'summary1', 'detail1', '2017-09-20', '2017-09-20 07:22:11', '2017-09-20 07:22:11', false, false, false, true),
 ('code2', 2, 'title2', 'summary2', 'detail2', '2017-09-21', '2017-09-20 07:22:12', '2017-09-20 07:22:12', false, false, false, true),
 ('code3', 2, 'title3', 'summary3', 'detail3', '2017-09-22', '2017-09-20 07:22:13', '2017-09-20 07:22:13', false, false, true, true),
-('code4', 2, 'title2', 'summary4', 'detail4', '2017-09-23', '2017-09-20 07:22:14', '2017-09-20 07:22:14', false, false, true, true);
-
-INSERT INTO documents_relatives (document_id, user_id) VALUES
-(3, 1), (4, 1);
+('code4', 2, 'title4', 'summary4', 'detail4', '2017-09-23', '2017-09-20 07:22:14', '2017-09-20 07:22:14', false, false, true, true);
 
 -- INSERT INTO document_process(name, description, created_time, available) VALUES
 -- ('name 1','des 1', '2018-05-08 00:00:00',true),
